@@ -1,28 +1,16 @@
 ---
-// Where the robots.txt to check comes from: a domain lookup, the generator's buttons, the text box or a dropped
-// file. app.js presses the buttons to match the generated block in the text box.
+// Where the robots.txt to check comes from: the generator's buttons, the text box or a dropped file. app.js presses
+// the buttons to match the generated block in the text box.
 import { GEN_CATS } from '../lib/catalog.js';
 ---
 
 <div class="panel">
-  <form class="dom" id="domform" novalidate>
-    <label for="dom" style="font-weight:600">Load by domain</label>
-    <div class="domrow">
-      <input id="dom" type="text" inputmode="url" autocomplete="url" spellcheck="false" placeholder="example.com"
-        aria-describedby="domhint domerr">
-      <a id="open" class="btn" href="#" target="_blank" rel="noopener noreferrer" aria-disabled="true">Open
-        robots.txt</a>
-    </div>
-    <p class="err" id="domerr" role="alert"></p>
-    <p class="hint" id="domhint" role="status">Loads the site’s robots.txt into the box below. Most sites don’t allow
-      that, so it opens in a new tab instead: select everything there, copy it, and paste it below.</p>
-  </form>
   <fieldset class="gen" id="gen" aria-describedby="gennote">
-    <legend>Or generate one</legend>
+    <legend class="sr">Generate a robots.txt</legend>
     <div class="gencats">
-      {GEN_CATS.map(([cat, title]) => (
+      {GEN_CATS.map(([cat, title, label = title]) => (
         <div class="gencat" role="group" aria-labelledby={`gc-${cat}`} data-cat={cat}>
-          <span class="gcname" id={`gc-${cat}`}>{title}</span>
+          <span class="gcname" id={`gc-${cat}`}>{label}</span>
           <span class="seg">
             <button type="button" data-set="unset" aria-pressed="true">Not set</button>
             <button type="button" data-set="block" aria-pressed="false">Block</button>
@@ -32,7 +20,7 @@ import { GEN_CATS } from '../lib/catalog.js';
       ))}
     </div>
     <p class="hint" id="gennote" style="margin-top:2px">Edits a marked block in your robots.txt below, or writes a new
-      one. Blocking AI search also blocks Googlebot and Bingbot. For single bots, click them in the table.</p>
+      one. For single bots, click them in the table.</p>
     <p class="hint" id="genstatus" role="status"></p>
   </fieldset>
   <label for="src" style="font-weight:600">Your robots.txt</label>
@@ -45,65 +33,3 @@ import { GEN_CATS } from '../lib/catalog.js';
   <p class="hint" id="srchint">Updates as you type. You can also drop a file onto the box.</p>
   <p class="hint" id="srcstatus" role="status"></p>
 </div>
-
-<script>
-  // Domain lookup. Tries to load the site's robots.txt directly; most sites don't allow that (CORS), so on failure
-  // it opens in a new tab for the user to copy. Hands the text to app.js by filling #src and firing an input event.
-  const $ = (id) => document.getElementById(id);
-  const form = $('domform'), dom = $('dom'), open = $('open'), err = $('domerr'), hint = $('domhint');
-  const src = $('src');
-  const KEY = 'robots-ai-check-domain';
-
-  const robotsUrl = (s) => {
-    s = s.trim(); if (!s) return null;
-    try {
-      const u = new URL(/^[a-z][a-z0-9+.-]*:\/\//i.test(s) ? s : 'https://' + s);
-      if (!/^https?:$/.test(u.protocol) || !u.hostname.includes('.') || /[^a-z0-9.-]/i.test(u.hostname) || u.username || u.password) return null;
-      return u.protocol + '//' + u.host + '/robots.txt';
-    } catch (e) {return null;}
-  };
-
-  const update = () => {
-    const url = robotsUrl(dom.value);
-    err.textContent = '';
-    open.href = url || '#';
-    open.setAttribute('aria-disabled', url ? 'false' : 'true');
-    try {localStorage.setItem(KEY, dom.value);} catch (e) { }
-  };
-
-  const showOpened = (url) => {hint.textContent = `Couldn’t load ${url} directly, so it opened in a new tab. Select everything there, copy it, and paste it into the box below.`;};
-
-  // If the browser blocks the late popup, the next click follows the link normally (a real user click).
-  let fetchFailed = null, busy = false;
-  open.addEventListener('click', async (e) => {
-    const url = robotsUrl(dom.value);
-    if (!url) {e.preventDefault(); err.textContent = dom.value.trim() ? 'That doesn’t look like a domain. Try something like example.com.' : 'Enter a domain first.'; dom.focus(); return;}
-    err.textContent = '';
-    if (url === fetchFailed) {showOpened(url); return;}
-    e.preventDefault();
-    if (busy) return;
-    busy = true;
-    hint.textContent = `Loading ${url}…`;
-    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 4000);
-    try {
-      const r = await fetch(url, {signal: ctl.signal, credentials: 'omit'});
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      if (/text\/html/i.test(r.headers.get('content-type') || '')) throw new Error('Not a robots.txt');
-      src.value = await r.text();
-      src.dispatchEvent(new Event('input', {bubbles: true}));
-      hint.textContent = `Loaded ${url}.`;
-    } catch (e) {
-      fetchFailed = url;
-      // Opened without the noopener feature so a blocked popup shows up as null; the opener link is cut by hand.
-      const w = window.open(url, '_blank');
-      if (w) {w.opener = null; showOpened(url);}
-      else hint.textContent = `Couldn’t load ${url} directly. Click Open robots.txt again to open it in a new tab, then copy it and paste it into the box below.`;
-    } finally {clearTimeout(timer); busy = false;}
-  });
-
-  dom.addEventListener('input', update);
-  dom.addEventListener('keydown', (e) => {if (e.key === 'Enter') {e.preventDefault(); open.click();} });
-  form.addEventListener('submit', (e) => e.preventDefault());
-  try {dom.value = localStorage.getItem(KEY) || '';} catch (e) { }
-  update();
-</script>

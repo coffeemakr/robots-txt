@@ -1,11 +1,11 @@
 // The page: renders the analysis of the robots.txt in the text box, and runs the generator's buttons.
-import {data, genBots, tableBots, sourceNumber, inCat} from '../lib/catalog.js';
-import {GEN_HEAD, analyze, evaluate, rulesFor, generate, hasBlock, mergeBlock, readBlock} from '../lib/robots.js';
+import {data, genBots, tableBots, sourceNumber, inCat, inGenCat, GEN_CATS, POLICY} from '../lib/catalog.js';
+import {GEN_HEAD, analyze, evaluate, parseRobots, rulesFor, generate, hasBlock, mergeBlock, readBlock} from '../lib/robots.js';
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
 const STORE = 'robots-ai-check';
-const src = $('src'), status = $('srcstatus'), genstatus = $('genstatus');
+const src = $('src'), status = $('srcstatus'), genstatus = $('genstatus'), sigstatus = $('sigstatus');
 
 // Labels table cells with their column heading, for the stacked mobile layout.
 new MutationObserver(() => {
@@ -127,12 +127,117 @@ const namedRow = (x) => `<tr class="k-${x.kind}">
   <td><span class="chip ic s-${x.status}" title="${lab(x)}"><span class="st" aria-hidden="true">${ico(x)}</span><span class="sr">${lab(x)}</span></span></td>
   <td>${namedNote(x)}${x.url ? `<div class="meta"><a href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">Operator’s page</a></div>` : ''}</td></tr>`;
 
-function signals(a) {
-  const p = (html) => `<p style="margin:0 0 8px">${html}</p>`;
-  const sig = a.parsed.signals.map(s => p(`<code>${esc(s.key)}: ${esc(s.val)}</code><br><span class="meta">Line ${s.line}${s.agents.length ? ', for ' + s.agents.map(esc).join(', ') : ''}. ${/signal/i.test(s.key) ? 'Cloudflare Content Signals' : 'IETF AIPREF draft'}: a usage preference, not a block.</span>`));
-  const ap = a.named.find(x => x.ua.toLowerCase() === '__usage_ai-training');
-  if (ap) sig.push(p(`<code>User-agent: __usage_ai-training</code> → ${lab(ap)}<br><span class="meta">Shared AI-training preference from an individual IETF draft. Anthropic applies it when ClaudeBot isn’t named; Google (when Google-Extended isn’t named) and Microsoft plan to from early 2027. The Training column already takes it into account for those three.</span>`));
-  return sig.length ? sig.join('') : '<p class="empty" style="margin:0">None found. You can add <code>Content-Signal: search=yes, ai-train=no</code> under <code>User-agent: *</code> to state usage preferences.</p>';
+// ---- Preference signals ----
+
+const YES = /^(y|yes)$/i, NO = /^(n|no)$/i;
+// "search=yes, ai-train=no" → [['search', 'yes'], ['ai-train', 'no']]
+const sigPairs = (val) => val.split(/[,;]/).map(x => x.split('=').map(y => y.trim())).filter(([k, v]) => k && v);
+const sigVal = (o) => Object.entries(o).map(([k, v]) => `${k}=${v}`).join(', ');
+
+// One preference as a chip: ✕ for no, ✓ for yes, the same look as the bots
+function pill(k, v) {
+  const st = NO.test(v) ? 'blocked' : YES.test(v) ? 'allowed' : 'na';
+  return `<span class="chip s-${st}" title="${esc(k)}=${esc(v)}"><span class="st" aria-hidden="true">${{blocked: '✕', allowed: '✓', na: '?'}[st]}</span><code>${esc(k)}</code><span class="sr">: ${esc(v)}</span></span>`;
+}
+
+// Content Signals keys, and the groups of bots that show what the file's rules want for each: the key should say
+// no when most bots of any of its groups are blocked. Regular search engines for search; AI search bots, or
+// user-requested fetchers, for ai-input; training bots for ai-train. Last, the generator's categories to block
+// when a signal says no but the rules let those bots in.
+const SIG_KEYS = [
+  ['search', 'search engine', [(b) => inGenCat(b, 'engines')], ['engines']],
+  ['ai-input', 'AI answer', [(b) => inGenCat(b, 'search'), (b) => inCat(b, 'fetch')], ['search', 'fetch']],
+  ['ai-train', 'training', [(b) => inCat(b, 'train')], ['train']],
+];
+// Blocked from everything, or from all but some exceptions: a Disallow: /private for everyone doesn't count
+const isShut = (b) => b.status === 'blocked' || mostly(b);
+const mostlyRestricted = (bs) => bs.length > 0 && bs.filter(isShut).length > bs.length / 2;
+const isStarSignal = (s) => /^content-signal$/i.test(s.key) && s.agents.includes('*');
+
+// The Content-Signal values that match the rules, from bots with their results: {search, 'ai-input', 'ai-train'}.
+// The one source for both the generated file's signal and the recommendations.
+const wantSignal = (bots) => Object.fromEntries(SIG_KEYS.map(([k, , groups]) => [k, groups.some(f => mostlyRestricted(bots.filter(f))) ? 'no' : 'yes']));
+// In a generated file, a bot is blocked exactly when the generated part blocks it
+const wantFor = (sel) => wantSignal(genAll.map(b => ({...b, status: sel.has(b.ua) ? 'blocked' : 'allowed'})));
+
+// How the * group's Content-Signal compares with the rules. tighten: keys the rules say no to but the signal
+// doesn't; loosen: keys the signal says no to but the rules mostly let in.
+function signalGaps(parsed, all) {
+  const want = wantSignal(all);
+  const cur = parsed.signals.find(isStarSignal);
+  const have = cur ? Object.fromEntries(sigPairs(cur.val).map(([k, v]) => [k.toLowerCase(), v])) : {};
+  return {
+    want, cur, have,
+    tighten: SIG_KEYS.filter(([k]) => want[k] === 'no' && !NO.test(have[k] || '')),
+    loosen: SIG_KEYS.filter(([k]) => want[k] !== 'no' && NO.test(have[k] || '')),
+  };
+}
+
+const recItem = (text, line, label, attrs) => `<li class="rec"><p>${text}</p>${line ? `<pre class="recline">${esc(line)}</pre>` : ''}<button type="button" ${attrs}>${esc(label)}</button></li>`;
+
+// Suggestions that bring the file's preference signals in line with its rules
+function recommend(a, all) {
+  const recs = [];
+  const {want, cur, have, tighten, loosen} = signalGaps(a.parsed, all);
+
+  // The rules block most of a kind, but the signal doesn't say no
+  if (tighten.length) {
+    const val = sigVal({...want, ...have, ...Object.fromEntries(tighten.map(([k]) => [k, 'no']))});
+    const names = tighten.map(([, n]) => n), kinds = names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names.at(-1) : names[0];
+    const text = cur ? `Your rules block most ${kinds} bots, but the <code>Content-Signal</code> on line ${cur.line} doesn’t say so.`
+      : `Your rules block most ${kinds} bots. Say the same to crawlers that read Content Signals, under <code>User-agent: *</code>.`;
+    recs.push(recItem(text, `Content-Signal: ${val}`, cur ? `Update line ${cur.line}` : 'Add to file', `data-act="signal" data-val="${esc(val)}"`));
+  }
+  // The signal says no, but the rules let most of those bots in
+  for (const [k, n, , cats] of loosen) {
+    const titles = cats.map(cat => GEN_CATS.find(([c]) => c === cat)[1].replace(/^[A-Z](?=[a-z])/, c => c.toLowerCase()));
+    recs.push(recItem(`Your signal says <code>${k}=no</code>, but most ${n} bots aren’t blocked. Many crawlers don’t read Content Signals, so block them too.`,
+      null, `Block ${titles.join(' and ')}`, `data-act="block" data-cat="${cats.join(' ')}"`));
+  }
+  // The shared training opt-out, when the rules block training
+  if (want['ai-train'] === 'no' && !a.named.some(x => x.ua.toLowerCase() === POLICY.toLowerCase()))
+    recs.push(recItem(`Also block <code>${POLICY}</code>, a shared training opt-out: Anthropic applies it now, Google and Microsoft from early 2027.`,
+      `User-agent: ${POLICY}\nDisallow: /`, 'Add to the generated block', 'data-act="policy"'));
+  return recs;
+}
+
+function signals(a, all) {
+  const found = a.parsed.signals.map(s => {
+    const pairs = sigPairs(s.val);
+    const where = s.agents.length ? 'for ' + s.agents.map(x => `<code>${esc(x)}</code>`).join(', ') : 'outside any group';
+    return `<li class="sig"><div class="sighead"><code>${esc(s.key)}</code><span class="meta">Line ${s.line} · ${where}</span></div>`
+      + `<div class="pills">${pairs.length ? pairs.map(([k, v]) => pill(k, v)).join('') : `<code>${esc(s.val)}</code>`}</div>`
+      + `<div class="meta">${/signal/i.test(s.key) ? 'Cloudflare Content Signals' : 'IETF AIPREF draft'}: a usage preference, not a block.</div></li>`;
+  });
+  const ap = a.named.find(x => x.ua.toLowerCase() === POLICY.toLowerCase());
+  if (ap) found.push(`<li class="sig"><div class="sighead"><code>User-agent: ${POLICY}</code></div>`
+    + `<div class="pills"><span class="chip s-${ap.status}"><span class="st" aria-hidden="true">${ico(ap)}</span>${lab(ap)}</span></div>`
+    + `<div class="meta">Shared AI-training opt-out from an individual IETF draft. Anthropic applies it when ClaudeBot isn’t named; Google (when Google-Extended isn’t named) and Microsoft plan to from early 2027. The Training column already takes it into account.</div></li>`);
+  const recs = recommend(a, all);
+  return (found.length ? `<h4 class="sigh">In your file</h4><ul class="sigs">${found.join('')}</ul>` : '<p class="meta">No preference signals in your file.</p>')
+    + (recs.length ? `<h4 class="sigh">Recommended</h4><ul class="sigs">${recs.join('')}</ul>`
+      : found.length ? '<p class="meta sigok">✓ Your signals match your rules.</p>'
+        : '<p class="meta">Signals such as <code>Content-Signal: ai-train=no</code> state how content may be used. Block something and a matching one is suggested here.</p>');
+}
+
+// The text with the * group's Content-Signal set to val: the line replaced, added under User-agent: *, or added in
+// a new * group at the end.
+function setSignal(text, val) {
+  text = text.replace(/\r\n?/g, '\n');
+  const parsed = parseRobots(text), lines = text.split('\n');
+  const cur = parsed.signals.find(isStarSignal);
+  if (cur) {
+    lines[cur.line - 1] = lines[cur.line - 1].replace(/:.*$/, `: ${val}`);
+    return lines.join('\n');
+  }
+  const g = parsed.groups.find(x => x.agents.includes('*'));
+  if (g) {
+    let i = g.line;
+    while (i < lines.length && /^\s*user[ _-]?agent\s*:/i.test(lines[i])) i++;
+    lines.splice(i, 0, `Content-Signal: ${val}`);
+    return lines.join('\n');
+  }
+  return (text.trim() ? text.replace(/\s*$/, '\n\n') : '') + `User-agent: *\nContent-Signal: ${val}\n`;
 }
 
 function warnings(w) {
@@ -153,11 +258,12 @@ function render() {
   $('tiles').innerHTML = CATS.map(c => tile(all, c)).join('');
   $('matrix').tBodies[0].innerHTML = `<tr class="sec"><td colspan="4">Major players</td></tr>${companyRows(a.companies, true)}<tr class="sec"><td colspan="4">Others</td></tr>${companyRows(a.companies, false)}`;
   $('named').tBodies[0].innerHTML = a.named.length ? a.named.map(namedRow).join('') : `<tr><td colspan="3" class="empty">No User-agent lines yet.</td></tr>`;
-  $('signals').innerHTML = signals(a);
   $('warnings').innerHTML = warnings(a.parsed.warnings);
   syncGen(picked);
   // The generator also covers bots from the user-agent table, which the tiles and tables don't
-  return [...all, ...tableBots.map(b => ({...b, ...evaluate(rulesFor(b.ua, a.parsed, b.fallback).rules)}))];
+  const gen = [...all, ...tableBots.map(b => ({...b, ...evaluate(rulesFor(b.ua, a.parsed, b.fallback).rules)}))];
+  $('signals').innerHTML = signals(a, gen);
+  return gen;
 }
 
 $('sortnote').insertAdjacentHTML('beforeend', fn('seranking'));
@@ -168,7 +274,7 @@ $('sources').innerHTML = data.sources.map((s, i) => `<li id="src-${i + 1}">${esc
 
 let t;
 src.addEventListener('input', () => {
-  if (src.value !== lastGen) genstatus.textContent = '';
+  if (src.value !== lastGen) genstatus.textContent = sigstatus.textContent = '';
   clearTimeout(t); t = setTimeout(render, 150);
 });
 $('clr').addEventListener('click', () => {src.value = ''; render(); src.focus();});
@@ -186,15 +292,22 @@ src.addEventListener('drop', (e) => {
 // (including documented AI data crawlers from the user-agent table), or every documented SEO tool or media monitor:
 // leave them to the rest of the file, block them, or allow them. render() presses the buttons to match the block in
 // the text box; when the category's bots are set one by one in different ways, none is pressed.
-// AI search deliberately overblocks: it includes the regular search engines (Googlebot, Bingbot, ...), because their
-// crawls also feed AI Overviews and Copilot. Only names the companies document: community-list names are left out.
-const genCat = (cat) => (b) => inCat(b, cat) && b.documented !== false;
+// The regular search engines (Googlebot, Bingbot, ...) have a row of their own, apart from AI search, since
+// blocking them takes the site out of search. Only names the companies document: community-list names are left out.
+const genCat = (cat) => (b) => inGenCat(b, cat) && b.documented !== false;
 const genAll = [...genBots, ...tableBots];
 const catBots = (cat) => genAll.filter(genCat(cat)).map(b => b.ua);
 const genRows = () => [...$('gen').querySelectorAll('[data-cat]')];
-// unset, block, allow, or mixed. p: readBlock's result
+// A category's own bots: those in no other category. Bytespider is in AI training and AI search, so blocking either
+// blocks it; it doesn't make the other look mixed. A category with no bots of its own uses all of them.
+const ownBots = (cat) => {
+  const us = catBots(cat), others = new Set(GEN_CATS.filter(([c]) => c !== cat).flatMap(([c]) => catBots(c)));
+  const own = us.filter(u => !others.has(u));
+  return own.length ? own : us;
+};
+// unset, block, allow, or mixed, from the category's own bots. p: readBlock's result
 function catState(cat, p) {
-  const us = catBots(cat);
+  const us = ownBots(cat);
   if (us.length && us.every(u => p.block.has(u))) return 'block';
   if (us.length && us.every(u => p.allow.has(u))) return 'allow';
   return us.some(u => p.block.has(u) || p.allow.has(u)) ? 'mixed' : 'unset';
@@ -210,12 +323,16 @@ let lastGen = null, undoText = null;
 
 // The text with the generated part blocking the bots in sel and letting in those in allow (Sets of user-agents).
 // The user's own file gets a marked block added; an empty box or a generated file is replaced.
-function build(sel, allow, cats) {
+// A generated file's Content-Signal says what its rules do (wantFor). Values someone changed by hand, those that
+// differ from what the earlier file's rules called for, are kept.
+function build(sel, allow) {
   const prev = src.value, date = new Date().toISOString().slice(0, 10);
   const merge = hasBlock(prev) || (!!prev.trim() && !prev.trimStart().startsWith(GEN_HEAD));
   if (merge) return {merge, text: mergeBlock(prev, sel, {date, allow})};
-  const yesNo = (block) => block ? 'no' : 'yes';
-  const signal = ['train', 'search', 'fetch'].some(c => cats.has(c)) ? `search=${yesNo(cats.has('search'))}, ai-input=${yesNo(cats.has('search') || cats.has('fetch'))}, ai-train=${yesNo(cats.has('train'))}` : '';
+  const cur = parseRobots(prev).signals.find(isStarSignal), old = wantFor(readBlock(prev).block);
+  const kept = cur ? Object.fromEntries(sigPairs(cur.val).map(([k, v]) => [k.toLowerCase(), v.toLowerCase()]).filter(([k, v]) => old[k] !== v)) : {};
+  const sig = {...wantFor(sel), ...kept};
+  const signal = Object.keys(kept).length || Object.values(sig).some(v => NO.test(v)) ? sigVal(sig) : '';
   return {merge, text: generate(sel, {signal, date, allow})};
 }
 
@@ -225,14 +342,32 @@ const fullCats = (sel) => new Set(genRows().map(r => r.dataset.cat).filter(c => 
   return us.length > 0 && us.every(u => sel.has(u));
 }));
 
-// Puts the generated part in the text box and says what changed. cleared: the row whose bots were just left to
-// the rest of the file, if any.
-function regen(sel, allow, cleared = null) {
-  const prev = src.value, cats = fullCats(sel);
-  const {merge, text} = build(sel, allow, cats);
-  // Offer to undo only when the text being changed is the user's own, not an earlier generated file
+// Puts text in the box and returns the Undo button to show, if any. Offers to undo only when the text being
+// changed is the user's own, not something this page wrote earlier.
+function put(text) {
+  const prev = src.value;
   if (prev !== lastGen && prev !== undoText) undoText = prev.trim() ? prev : null;
   lastGen = src.value = text;
+  genstatus.textContent = sigstatus.textContent = '';
+  return undoText !== null ? '<button type="button" class="undo">Undo</button> ' : '';
+}
+
+// In the user's own file the generator leaves the Content-Signal line alone (it's outside the marked block), so it
+// says when that line no longer matches the rules
+function sigNote(merge, all) {
+  if (!merge) return '';
+  const {cur, tighten, loosen} = signalGaps(parseRobots(src.value), all);
+  if (!cur || !(tighten.length || loosen.length)) return '';
+  const keys = [...tighten, ...loosen].map(([k]) => k).join(', ');
+  return `Your Content-Signal on line ${cur.line} no longer matches the rules for ${keys}; see AI preference signals.`;
+}
+
+// Puts the generated part in the text box and says what changed, in out. cleared: the row whose bots were just
+// left to the rest of the file, if any.
+function regen(sel, allow, {cleared = null, out = genstatus} = {}) {
+  const prev = src.value, cats = fullCats(sel);
+  const {merge, text} = build(sel, allow);
+  const undo = put(text);
   const all = render();
 
   // Rules in the user's file can outweigh the block (Allow: / beats Disallow: /), or block what's no longer in it
@@ -248,29 +383,29 @@ function regen(sel, allow, cleared = null) {
     open.length && `Your file’s own rules still let ${open.join(', ')} in; edit their groups to block ${open.length > 1 ? 'them' : 'it'} fully.`,
     shut.length && `Your file’s own rules still block ${shut.join(', ')} from some paths.`,
     still.length && `Your file’s own rules still block ${still.join(' and ')}, fully or in part.`,
-    cats.has('search') && 'This also removes the site from Google, Bing and other regular search results.',
+    sigNote(merge, all),
+    cats.has('engines') && 'This removes the site from Google, Bing and other regular search results.',
     cats.has('fetch') && 'Several user-requested fetchers say they may ignore robots.txt.',
     cats.has('seo') && 'SEO tools include audit crawlers you may run on your own site, such as Screaming Frog and Sitebulb.',
   ].filter(Boolean);
-  genstatus.innerHTML = (did ? esc(did) + ' ' : '') + (undoText !== null ? '<button type="button" id="genundo">Undo</button> ' : '') + esc(notes.join(' '));
+  out.innerHTML = (did ? esc(did) + ' ' : '') + undo + esc(notes.join(' '));
 }
 
-// A category's button sets all its bots in the generated block. Not set takes them out, except bots another
-// category (Bytespider is in two) still blocks or allows in full. Other bots stay as they are.
+// A category's button sets all its bots in the generated block. Not set takes them out, except bots it shares with
+// a category (Bytespider is in two) that has something set: those are the other category's to change. Pressing the
+// button that's already pressed changes nothing.
 $('gen').addEventListener('click', (e) => {
   const btn = e.target.closest('button[data-set]');
-  if (!btn) return;
+  if (!btn || btn.getAttribute('aria-pressed') === 'true') return;
   const row = btn.closest('[data-cat]'), to = btn.dataset.set, p = readBlock(src.value);
-  const others = genRows().filter(r => r !== row).map(r => [r.dataset.cat, catState(r.dataset.cat, p)]);
-  const keep = (s) => new Set(others.filter(([, x]) => x === s).flatMap(([c]) => catBots(c)));
-  const keepBlock = keep('block'), keepAllow = keep('allow');
+  const held = new Set(genRows().filter(r => r !== row && catState(r.dataset.cat, p) !== 'unset').flatMap(r => catBots(r.dataset.cat)));
   for (const u of catBots(row.dataset.cat)) {
-    if (to !== 'unset' || !keepBlock.has(u)) p.block.delete(u);
-    if (to !== 'unset' || !keepAllow.has(u)) p.allow.delete(u);
+    if (to === 'unset' && held.has(u)) continue;
+    p.block.delete(u); p.allow.delete(u);
     if (to === 'block') p.block.add(u);
     if (to === 'allow') p.allow.add(u);
   }
-  regen(p.block, p.allow, to === 'unset' ? row : null);
+  regen(p.block, p.allow, {cleared: to === 'unset' ? row : null});
 });
 
 // A bot in the company table moves on to the next of its three states in the generated block: not in it, blocked
@@ -290,10 +425,33 @@ $('matrix').addEventListener('click', (e) => {
   const again = btns()[at];
   if (again) again.focus();
 });
-genstatus.addEventListener('click', (e) => {
-  if (e.target.id !== 'genundo' || undoText === null) return;
+// The recommendations in the preference signals panel
+$('signals').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-act]');
+  if (!btn) return;
+  const {act} = btn.dataset;
+  if (act === 'signal') {
+    const had = src.value.replace(/\r\n?/g, '\n');
+    const text = setSignal(had, btn.dataset.val);
+    const undo = put(text);
+    render();
+    sigstatus.innerHTML = esc(parseRobots(had).signals.some(isStarSignal) ? 'Updated the Content-Signal line.' : 'Added a Content-Signal line.') + ' ' + undo;
+  } else if (act === 'block') {
+    const p = readBlock(src.value);
+    for (const u of btn.dataset.cat.split(' ').flatMap(catBots)) {p.allow.delete(u); p.block.add(u);}
+    regen(p.block, p.allow, {out: sigstatus});
+  } else if (act === 'policy') {
+    const p = readBlock(src.value);
+    p.allow.delete(POLICY); p.block.add(POLICY);
+    regen(p.block, p.allow, {out: sigstatus});
+  }
+});
+
+// Undo, in either status line
+document.addEventListener('click', (e) => {
+  if (!e.target.classList || !e.target.classList.contains('undo') || undoText === null) return;
   src.value = undoText; undoText = lastGen = null;
-  genstatus.textContent = '';
+  genstatus.textContent = sigstatus.textContent = '';
   render(); src.focus();
 });
 

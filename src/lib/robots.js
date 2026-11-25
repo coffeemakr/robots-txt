@@ -1,5 +1,5 @@
 // robots.txt parsing, evaluation and generation. No DOM: app.js renders the results.
-import {data, POLICY, GEN_CATS, companyOrder, inCat, tableBots} from './catalog.js';
+import {data, POLICY, GEN_CATS, companyOrder, inCat, inGenCat, tableBots} from './catalog.js';
 
 const GOOGLE_FALLBACK = {'googlebot-image': ['Googlebot'], 'googlebot-video': ['Googlebot'], 'googlebot-news': ['Googlebot']};
 const UA_KEYS = ['user-agent', 'useragent', 'user agent'];
@@ -191,12 +191,19 @@ function groupLines(sel, own, allow = new Set()) {
     list.forEach(u => seen.add(u.toLowerCase()));
     out.push(`# ${title}`, ...comments.map(c => `# ${c}`), ...list.map(u => `User-agent: ${u}`), ...rules, '');
   };
+  // A bot in several sections (Bytespider) goes in the one with the largest share of its bots blocked, so it
+  // shows up under what was picked
+  const share = Object.fromEntries(GEN_CATS.map(([c]) => {
+    const bs = bots.filter(b => inGenCat(b, c));
+    return [c, bs.length ? bs.filter(b => sel.has(b.ua)).length / bs.length : 0];
+  }));
+  const home = (b) => GEN_CATS.map(([c]) => c).filter(c => inGenCat(b, c)).reduce((x, y) => share[y] > share[x] ? y : x);
   for (const [cat, title] of GEN_CATS) {
-    const picked = bots.filter(b => inCat(b, cat) && sel.has(b.ua));
+    const picked = bots.filter(b => sel.has(b.ua) && inGenCat(b, cat) && home(b) === cat);
     const comments = [];
     if (cat === 'train' && sel.has(POLICY)) comments.push('__usage_ai-training: shared training opt-out (Anthropic now, Google and Microsoft from early 2027)');
-    if (cat === 'search' && sel.has('Googlebot')) comments.push('Blocking Googlebot removes this site from Google Search entirely');
-    if (cat === 'search' && sel.has('Bingbot')) comments.push('Blocking Bingbot removes this site from Bing and Copilot answers');
+    if (cat === 'engines' && sel.has('Googlebot')) comments.push('Blocking Googlebot removes this site from Google Search entirely');
+    if (cat === 'engines' && sel.has('Bingbot')) comments.push('Blocking Bingbot removes this site from Bing and Copilot answers');
     if (cat === 'fetch' && picked.some(b => b.ignores)) comments.push('Some of these say they may ignore robots.txt for user requests');
     if (cat === 'seo' && picked.length) comments.push('Includes audit tools you may run on your own site, such as Screaming Frog and Sitebulb');
     group(title, picked.map(b => b.ua), ['Disallow: /'], comments);
