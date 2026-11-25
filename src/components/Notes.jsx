@@ -1,0 +1,36 @@
+// Footer notes on how results are worked out, and the numbered sources the footnotes point to.
+import {data} from '../lib/page.js';
+import {ExternalLink} from './Bits.jsx';
+
+export default function Notes() {
+  return <>
+    <p><b>How it decides.</b> Each bot uses the group that names it (case-insensitive), otherwise the <code>*</code>{' '}
+      group, following RFC 9309. Groups naming the same bot are combined. The longest matching rule wins, and Allow
+      wins a tie. <code>*</code> and <code>$</code> wildcards are supported. A bot is <b>Partial</b> when some paths
+      are blocked and others aren’t. Documented fallbacks are applied: Applebot uses your Googlebot rules if it isn’t
+      named; ClaudeBot and Google-Extended use a <code>__usage_ai-training</code> group if they aren’t named (Google
+      from early 2027). Microsoft’s training cell uses that group, otherwise your Bingbot rules. Amazon says
+      Amzn-SearchBot follows your rules for other search bots; your Googlebot rules stand in for those. Like Google,
+      the page accepts common misspellings and a missing colon, and flags them, because other crawlers may not. Paths
+      that don’t start with <code>/</code> or <code>*</code> match nothing.</p>
+    <p><b>Microsoft Copilot.</b> Copilot runs on a mix of OpenAI, Anthropic and Microsoft’s own MAI models. GPTBot and
+      ClaudeBot cover what OpenAI and Anthropic train on. Microsoft trains its MAI models on pages Bingbot crawls, on
+      Common Crawl, on licensed content, and on consumer Copilot conversations from users who haven’t opted out.
+      Microsoft has no separate training crawler: until 1 February 2027 the only robots.txt control is blocking
+      Bingbot, which also removes you from Bing. From then on it honours <code>__usage_ai-training</code> for training
+      and separate page-level settings for grounding. Sources:{' '}
+      <ExternalLink href="https://microsoft.ai/pdf/MAI-Thinking-1-Data-Summary.pdf">MAI-Thinking-1 data summary</ExternalLink>,{' '}
+      <ExternalLink href="https://www.bing.com/webmasters/help/new-ai-preferences-2t1cc16d">Bing AI preferences</ExternalLink>,{' '}
+      <ExternalLink href="https://support.microsoft.com/microsoft-copilot/microsoft-copilot-privacy-controls">Copilot privacy controls</ExternalLink>.</p>
+    <p><b>Limits.</b> Bot purposes and robots.txt behaviour are taken from each company’s published documentation as
+      of November 2026. robots.txt is a request, not a lock: it doesn’t stop bots that ignore it or pose as browsers,
+      and it can’t remove content already collected. Microsoft’s and Google’s AI-feature controls also live outside
+      robots.txt (page directives and Search Console).</p>
+    <h2 style={{marginTop: 24, fontSize: 18}}>Sources</h2>
+    <ol className="src">
+      {data.sources.map((s, i) => <li key={s.id} id={`src-${i + 1}`}>
+        {s.title}. <ExternalLink href={s.url}>{s.url.replace(/^https:\/\//, '')}</ExternalLink>
+      </li>)}
+    </ol>
+  </>;
+}

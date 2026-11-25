@@ -1,4 +1,4 @@
-// Shared by the Astro components (build time) and app.js (browser), so both see the bots in the same order.
+// Shared by the page's components and the robots.txt logic, so both see the bots in the same order.
 import data from '../data/bots.json';
 
 export {data};
@@ -14,7 +14,7 @@ export const GEN_CATS = [['train', 'AI training'], ['search', 'AI search'], ['en
 // documented. An entry's kind picks its section (AI data crawlers count as AI training); `cat` overrides that.
 const KIND_CAT = {seo: 'seo', intel: 'intel', aidata: 'train'};
 export const tableBots = Object.values(data.userAgentNotes)
-  .filter(n => (n.cat || KIND_CAT[n.kind]) && n.url && n.ua)
+  .filter(n => (n.cat || KIND_CAT[n.kind]) && n.url)
   .map(n => ({ua: n.ua, cat: n.cat || KIND_CAT[n.kind], fallback: n.fallback}));
 
 // Whether a bot serves a purpose. A bot's `cat` is one purpose, or a list when it serves several (Bytespider).

@@ -1,10 +1,14 @@
 /* VOICE: a precise inspection tool, calm and direct, like a customs checklist.
    IDEA: a stamped inspection sheet: every bot gets a verdict stamp per purpose.
    PICTURE: the live matrix of companies x training/search/fetch, stamps in cells.
-   COLOUR and TYPE: warm paper ground, ink text, signal red for blocked; Space Grotesk + Inter.
+   COLOUR and TYPE: warm paper ground, ink text, signal red for blocked; Space Grotesk + Inter, self-hosted
+   from npm (@fontsource, imported in main.jsx).
    LAYOUT: editor left, verdict tiles right, full-width matrix below, details after. */
 :root {
   color-scheme: light dark;
+  --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --display: "Space Grotesk", var(--sans);
+  --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
   --bg: light-dark(#f4f1ea, #171614);
   --ink: light-dark(#1c1b19, #f1ede4);
   --card: light-dark(#fbfaf6, #211f1c);
@@ -34,13 +38,13 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 16px/1.55 Inter, system-ui, sans-serif;
+  font: 16px/1.55 var(--sans);
   overflow-x: clip
 }
 
 h1,
 h2 {
-  font-family: "Space Grotesk", Inter, sans-serif;
+  font-family: var(--display);
   font-weight: 600;
   line-height: 1.05;
   text-wrap: balance;
@@ -95,7 +99,7 @@ textarea {
   width: 100%;
   min-height: 340px;
   resize: vertical;
-  font: 14px/1.5 "JetBrains Mono", ui-monospace, monospace;
+  font: 14px/1.5 var(--mono);
   color: var(--ink);
   background: transparent;
   border: 1px solid var(--line);
@@ -117,7 +121,7 @@ button:focus-visible {
 }
 
 button {
-  font: 500 15px Inter, sans-serif;
+  font: 500 15px var(--sans);
   min-height: 44px;
   padding: 0 16px;
   border-radius: 10px;
@@ -163,7 +167,7 @@ button {
 }
 
 .tile .big {
-  font: 600 clamp(30px, 3.6vw, 44px)/1 "Space Grotesk", sans-serif
+  font: 600 clamp(30px, 3.6vw, 44px)/1 var(--display)
 }
 
 .tile .big small {
@@ -250,18 +254,18 @@ td {
 }
 
 th {
-  font: 500 13px Inter, sans-serif;
+  font: 500 13px var(--sans);
   color: var(--muted)
 }
 
 tr.sec td {
   background: var(--bg);
-  font: 600 14px "Space Grotesk", sans-serif;
+  font: 600 14px var(--display);
   padding: 8px 12px
 }
 
 th.co {
-  font: 600 16px Inter, sans-serif;
+  font: 600 16px var(--sans);
   color: var(--ink);
   width: 16%
 }
@@ -269,24 +273,13 @@ th.co {
 .open {
   display: block;
   margin-top: 3px;
-  font: 500 12px Inter, sans-serif;
+  font: 500 12px var(--sans);
   color: var(--muted);
   cursor: help
 }
 
 .open sup {
   cursor: auto
-}
-
-.oleg {
-  margin: 6px 0 0;
-  font-size: 13px;
-  color: var(--muted)
-}
-
-.oleg b {
-  font-weight: 600;
-  color: var(--ink)
 }
 
 .cell {
@@ -300,7 +293,7 @@ th.co {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px;
-  font: 500 14px Inter, sans-serif;
+  font: 500 14px var(--sans);
   padding: 4px 10px;
   border-radius: 8px;
   border: 1.5px solid var(--ink);
@@ -309,7 +302,7 @@ th.co {
 }
 
 .chip code {
-  font: 500 13px "JetBrains Mono", monospace;
+  font: 500 13px var(--mono);
   overflow-wrap: anywhere
 }
 
@@ -393,7 +386,7 @@ th.co {
 
 /* Preference signals: what the file says, then suggestions that match it to the rules */
 .sigh {
-  font: 600 12px Inter, sans-serif;
+  font: 600 12px var(--sans);
   text-transform: uppercase;
   letter-spacing: .06em;
   color: var(--muted);
@@ -427,7 +420,7 @@ th.co {
 }
 
 .sighead > code {
-  font: 500 14px "JetBrains Mono", monospace
+  font: 500 14px var(--mono)
 }
 
 .pills {
@@ -455,7 +448,7 @@ th.co {
 .recline {
   margin: 0 0 10px;
   padding: 6px 8px;
-  font: 13px/1.5 "JetBrains Mono", monospace;
+  font: 13px/1.5 var(--mono);
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 6px;
@@ -478,7 +471,7 @@ th.co {
 }
 
 .panel h3 {
-  font: 600 17px "Space Grotesk", Inter, sans-serif;
+  font: 600 17px var(--display);
   margin: 0 0 10px
 }
 
@@ -499,7 +492,7 @@ th.co {
 }
 
 .meta code {
-  font-family: "JetBrains Mono", monospace;
+  font-family: var(--mono);
   font-size: 12px
 }
 
@@ -559,7 +552,7 @@ th.co {
   border-radius: 50%;
   border: 1.5px solid var(--warn);
   color: var(--warn);
-  font: 700 11px/1 Inter, sans-serif
+  font: 700 11px/1 var(--sans)
 }
 
 .caut.ign .ex {
@@ -737,6 +730,11 @@ ul.warn li {
 pre,
 .scroll {
   overflow-x: auto
+}
+
+code,
+pre {
+  font-family: var(--mono)
 }
 
 code {

@@ -611,208 +611,259 @@
   "userAgentNotes": {
     "img2dataset": {
       "kind": "ignores",
+      "ua": "img2dataset",
       "note": "Never reads robots.txt. By default it skips images sent with an X-Robots-Tag of noai, noimageai, noindex or noimageindex, but whoever runs it can turn that off"
     },
     "facebookexternalhit": {
       "kind": "ignores",
+      "ua": "facebookexternalhit",
       "note": "Link previews on Facebook, Instagram and Messenger; may bypass robots.txt for security checks. Blocking breaks previews"
     },
     "colly": {
       "kind": "ignores",
+      "ua": "colly",
       "note": "Go scraping library; ignores robots.txt by default"
     },
     "anthropic-ai": {
       "kind": "legacy",
+      "ua": "anthropic-ai",
       "note": "Retired Anthropic name. Harmless, but has no effect"
     },
     "claude-web": {
       "kind": "legacy",
+      "ua": "Claude-Web",
       "note": "Retired Anthropic name. Harmless, but has no effect"
     },
     "facebookbot": {
       "kind": "legacy",
+      "ua": "FacebookBot",
       "note": "No longer in Meta’s crawler documentation"
     },
     "google-notebooklm": {
       "kind": "legacy",
+      "ua": "Google-NotebookLM",
       "note": "Former name of Google-GeminiNotebook, supported until August 2026"
     },
     "chatglm-spider": {
       "kind": "unconfirmed",
+      "ua": "ChatGLM-Spider",
       "note": "Older name from community lists; Z.ai’s training summary names GLMBot"
     },
     "aliyunbot": {
       "kind": "unconfirmed",
+      "ua": "AliyunBot",
       "note": "Name from community lists, not confirmed by Alibaba"
     },
     "erniebot": {
       "kind": "unconfirmed",
+      "ua": "ErnieBot",
       "note": "Name from community lists, not confirmed by Baidu"
     },
     "yiyanbot": {
       "kind": "unconfirmed",
+      "ua": "YiyanBot",
       "note": "Name from community lists, not confirmed by Baidu"
     },
     "grokbot": {
       "kind": "unconfirmed",
+      "ua": "GrokBot",
       "note": "Name from community lists; xAI publishes no crawler names"
     },
     "xai-grok": {
       "kind": "unconfirmed",
+      "ua": "xAI-Grok",
       "note": "Name from community lists; xAI publishes no crawler names"
     },
     "xai-searchbot": {
       "kind": "unconfirmed",
+      "ua": "xAI-SearchBot",
       "note": "Name from community lists; xAI publishes no crawler names"
     },
     "grok-deepsearch": {
       "kind": "unconfirmed",
+      "ua": "Grok-DeepSearch",
       "note": "Name from community lists; xAI publishes no crawler names"
     },
     "grok-agent": {
       "kind": "unconfirmed",
+      "ua": "Grok-Agent",
       "note": "Name from community lists; xAI publishes no crawler names"
     },
     "deepseekbot": {
       "kind": "unconfirmed",
+      "ua": "DeepSeekBot",
       "note": "Name from community lists; DeepSeek publishes no crawler documentation"
     },
     "coherebot": {
       "kind": "documented",
+      "ua": "Coherebot",
       "note": "Cohere’s own robots.txt name. Cohere says it doesn’t currently crawl to train models"
     },
     "cohere-ai": {
       "kind": "unconfirmed",
+      "ua": "cohere-ai",
       "note": "Not in Cohere’s documentation, which uses Coherebot"
     },
     "cohere-training-data-crawler": {
       "kind": "unconfirmed",
+      "ua": "cohere-training-data-crawler",
       "note": "Not in Cohere’s documentation, which uses Coherebot"
     },
     "imagesiftbot": {
       "kind": "documented",
+      "ua": "ImagesiftBot",
       "note": "Hive’s image search index; training not mentioned. If not named, it follows your Googlebot rules"
     },
     "meta-externalads": {
       "kind": "documented",
+      "ua": "meta-externalads",
       "note": "Meta advertising crawler"
     },
     "google-cloudvertexbot": {
       "kind": "documented",
+      "ua": "Google-CloudVertexBot",
       "note": "Google Cloud Vertex AI crawler"
     },
     "firecrawlagent": {
       "kind": "tool",
+      "ua": "FirecrawlAgent",
       "note": "Firecrawl: multi-page crawls check robots.txt; single-page scrapes don’t"
     },
     "trafilatura": {
       "kind": "tool",
+      "ua": "trafilatura",
       "note": "Its crawler checks robots.txt; single downloads don’t"
     },
     "scrapy": {
       "kind": "tool",
+      "ua": "Scrapy",
       "note": "Checks robots.txt only in projects made from its template"
     },
     "googlebot-image": {
       "kind": "documented",
+      "ua": "Googlebot-Image",
       "note": "Google Images and Discover. Not a training control"
     },
     "googleother": {
       "kind": "documented",
+      "ua": "GoogleOther",
       "note": "Google’s general crawler for product teams, not Search"
     },
     "googleother-image": {
       "kind": "documented",
+      "ua": "GoogleOther-Image",
       "note": "Google’s general crawler for images, not Search"
     },
     "googleother-video": {
       "kind": "documented",
+      "ua": "GoogleOther-Video",
       "note": "Google’s general crawler for video, not Search"
     },
     "__usage_ai-training": {
       "kind": "signal",
+      "ua": "__usage_ai-training",
       "note": "Shared AI-training preference from an individual IETF draft. Anthropic applies it when ClaudeBot isn’t named; Google (when Google-Extended isn’t named) and Microsoft plan to from early 2027"
     },
     "*": {
       "kind": "documented",
+      "ua": "*",
       "note": "All crawlers not named elsewhere"
     },
     "operator": {
       "kind": "noeffect",
+      "ua": "Operator",
       "note": "OpenAI’s agent identifies itself with signed request headers (Signature-Agent: https://chatgpt.com) and a normal browser user agent, so this rule likely matches nothing"
     },
     "mistralai-crawler": {
       "kind": "noeffect",
+      "ua": "MistralAI-Crawler",
       "note": "Not a Mistral name. Mistral documents MistralAI-Training, MistralAI-Index and MistralAI-User"
     },
     "deepseek": {
       "kind": "unconfirmed",
+      "ua": "DeepSeek",
       "note": "DeepSeek publishes no crawler names; this rule likely matches nothing"
     },
     "deepseek-crawler": {
       "kind": "unconfirmed",
+      "ua": "DeepSeek-Crawler",
       "note": "DeepSeek publishes no crawler names; this rule likely matches nothing"
     },
     "deepseek-v3": {
       "kind": "noeffect",
+      "ua": "DeepSeek-V3",
       "note": "A model name, not a crawler; this rule likely matches nothing"
     },
     "webzio": {
       "kind": "unconfirmed",
+      "ua": "Webzio",
       "note": "Not a documented Webz.io name; its crawler is omgili, its training control Webzio-Extended"
     },
     "omgilibot": {
       "kind": "legacy",
+      "ua": "omgilibot",
       "note": "Old Webz.io name; omgili is the current crawler"
     },
     "laiondownloader": {
       "kind": "unconfirmed",
+      "ua": "LAIONDownloader",
       "note": "LAION says it doesn’t crawl: its datasets list image URLs from Common Crawl, downloaded with tools such as img2dataset"
     },
     "ai2bot-dolma": {
       "kind": "unconfirmed",
+      "ua": "Ai2Bot-Dolma",
       "note": "Not on Ai2’s crawler page, which names only AI2Bot"
     },
     "tiktokspider": {
       "kind": "caution",
+      "ua": "TikTokSpider",
       "note": "ByteDance fetcher; purpose and robots.txt behaviour not documented"
     },
     "diffbot": {
       "kind": "caution",
+      "ua": "Diffbot",
       "note": "Builds a web knowledge graph sold for AI and data uses; community lists say robots.txt compliance is up to its customers"
     },
     "brightbot": {
       "kind": "caution",
+      "ua": "Brightbot",
       "note": "Bright Data; community lists report AI-training use and disguised requests"
     },
     "isscybercrawler": {
       "kind": "ignores",
+      "ua": "ISSCyberCrawler",
       "note": "ISS cyber-risk models; community lists report it ignores robots.txt"
     },
     "isscyberriskcrawler": {
       "kind": "ignores",
+      "ua": "ISSCyberRiskCrawler",
       "note": "ISS cyber-risk models; community lists report it ignores robots.txt"
     },
     "aihitbot": {
       "kind": "aidata",
+      "ua": "aiHitBot",
       "note": "aiHit company-data crawler (community lists); aiHit’s site doesn’t document it"
     },
     "cotoyogi": {
       "kind": "documented",
+      "ua": "Cotoyogi",
       "note": "ROIS-DS (Japan) crawler collecting Japanese-language data. Community lists call it an AI scraper; ROIS doesn’t say so",
       "url": "https://ds.rois.ac.jp/en_center8/en_crawler/"
     },
     "crawlspace": {
       "kind": "tool",
+      "ua": "Crawlspace",
       "note": "Crawlspace platform where developers run crawlers for apps, AI agents and RAG. Blocking it blocks them all",
       "url": "https://www.crawlspace.dev/"
     },
     "factset_spyderbot": {
       "kind": "aidata",
+      "ua": "Factset_spyderbot",
       "note": "FactSet data collection for AI (community lists)"
     },
     "friendlycrawler": {
       "kind": "aidata",
+      "ua": "FriendlyCrawler",
       "note": "Unknown operator building machine-learning datasets (community lists)"
     },
     "icc-crawler": {
@@ -829,15 +880,18 @@
     },
     "qualifiedbot": {
       "kind": "documented",
+      "ua": "QualifiedBot",
       "note": "Qualified crawls its customers’ websites to power its AI sales products. Its page doesn’t mention robots.txt",
       "url": "https://www.qualified.com/legal/qualified-crawler-user-agent"
     },
     "sidetrade": {
       "kind": "aidata",
+      "ua": "Sidetrade indexer bot",
       "note": "Sidetrade indexer: data for products including AI training (community lists)"
     },
     "timpibot": {
       "kind": "aidata",
+      "ua": "Timpibot",
       "note": "Timpi: data offered for AI model training (community lists)"
     },
     "velenpublicwebcrawler": {
@@ -848,6 +902,7 @@
     },
     "wpbot": {
       "kind": "aidata",
+      "ua": "wpbot",
       "note": "Community lists link it to a WordPress AI chatbot plugin, but its opt-out form was made at Plesk. Undocumented"
     },
     "semrushbot-ocob": {
@@ -866,26 +921,32 @@
     },
     "mediapartners-google": {
       "kind": "ads",
+      "ua": "Mediapartners-Google",
       "note": "Google AdSense. Blocking it affects ad targeting, not Search or AI"
     },
     "amazonadbot": {
       "kind": "ads",
+      "ua": "AmazonAdBot",
       "note": "Amazon advertising crawler"
     },
     "peer39_crawler": {
       "kind": "ads",
+      "ua": "peer39_crawler",
       "note": "Peer39 contextual ad targeting and brand safety"
     },
     "peer_39_crawler": {
       "kind": "ads",
+      "ua": "peer_39_crawler",
       "note": "Peer39 contextual ad targeting and brand safety"
     },
     "proximic": {
       "kind": "ads",
+      "ua": "proximic",
       "note": "Contextual ad targeting"
     },
     "admantx": {
       "kind": "ads",
+      "ua": "ADmantX",
       "note": "Contextual ad targeting and brand safety"
     },
     "magpie-crawler": {
@@ -896,6 +957,7 @@
     },
     "meltwater": {
       "kind": "intel",
+      "ua": "Meltwater",
       "note": "Meltwater media monitoring"
     },
     "awariorssbot": {
@@ -912,42 +974,52 @@
     },
     "blp_bbot": {
       "kind": "intel",
+      "ua": "BLP_bbot",
       "note": "Bloomberg news crawler"
     },
     "newsnow": {
       "kind": "intel",
+      "ua": "NewsNow",
       "note": "NewsNow news aggregator"
     },
     "landau-media-spider": {
       "kind": "unconfirmed",
+      "ua": "Landau-Media-Spider",
       "note": "Name from community lists; its user agent links to landaumedia.de (Landau Media, a German media-monitoring firm). Purpose not documented"
     },
     "um-ln": {
       "kind": "unconfirmed",
+      "ua": "um-LN",
       "note": "Name from community lists, said to be UNICEPTA (formerly Ubermetrics) media monitoring (Germany). Not confirmed by UNICEPTA"
     },
     "um-ic": {
       "kind": "unconfirmed",
+      "ua": "um-IC",
       "note": "Name from community lists, said to be UNICEPTA (formerly Ubermetrics) media monitoring (Germany). Not confirmed by UNICEPTA"
     },
     "um-fc": {
       "kind": "unconfirmed",
+      "ua": "um-FC",
       "note": "Name from community lists, said to be UNICEPTA (formerly Ubermetrics) media monitoring (Germany). Not confirmed by UNICEPTA"
     },
     "pmgcrawler": {
       "kind": "unconfirmed",
+      "ua": "PMGCrawler",
       "note": "Name from community lists, said to be PMG Presse-Monitor press clipping (Germany). Not confirmed by PMG"
     },
     "echobot": {
       "kind": "unconfirmed",
+      "ua": "echobot",
       "note": "Name from community lists, which attribute it to Echobox (UK social publishing), not the German Echobot (now Dealfront). Not confirmed by either"
     },
     "news-please": {
       "kind": "tool",
+      "ua": "news-please",
       "note": "Open-source news crawler library; behaviour depends on who runs it"
     },
     "imgproxy": {
       "kind": "tool",
+      "ua": "imgproxy",
       "note": "Image-resizing server software. Its requests come from whoever runs it, usually fetching images to resize"
     },
     "semrushbot": {
@@ -964,6 +1036,7 @@
     },
     "dotbot": {
       "kind": "seo",
+      "ua": "DotBot",
       "note": "Moz SEO crawler"
     },
     "dataforseobot": {
@@ -974,6 +1047,7 @@
     },
     "blexbot": {
       "kind": "seo",
+      "ua": "BLEXBot",
       "note": "BLEXBot (WebMeUp) backlink crawler"
     },
     "mj12bot": {
@@ -984,42 +1058,52 @@
     },
     "megaindex": {
       "kind": "seo",
+      "ua": "MegaIndex",
       "note": "MegaIndex SEO crawler"
     },
     "yandex": {
       "kind": "searchengine",
+      "ua": "Yandex",
       "note": "Yandex search (Russia)"
     },
     "baiduspider": {
       "kind": "searchengine",
+      "ua": "Baiduspider",
       "note": "Baidu search (China); also supplies Baidu’s ERNIE"
     },
     "360spider": {
       "kind": "searchengine",
+      "ua": "360Spider",
       "note": "360 Search (China)"
     },
     "yisouspider": {
       "kind": "searchengine",
+      "ua": "YisouSpider",
       "note": "Shenma search (China, Alibaba)"
     },
     "sogou": {
       "kind": "searchengine",
+      "ua": "Sogou web spider",
       "note": "Sogou search (China)"
     },
     "mail.ru_bot": {
       "kind": "searchengine",
+      "ua": "Mail.RU_Bot",
       "note": "Mail.ru search (Russia)"
     },
     "seekport": {
       "kind": "searchengine",
+      "ua": "Seekport",
       "note": "Seekport search engine"
     },
     "psbot": {
       "kind": "searchengine",
+      "ua": "psbot",
       "note": "Picsearch image search"
     },
     "scoop.it": {
       "kind": "intel",
+      "ua": "Scoop.it",
       "note": "Scoop.it content-curation platform"
     },
     "sistrix": {
@@ -1207,151 +1291,181 @@
     },
     "ezoicbot": {
       "kind": "tool",
+      "ua": "EzoicBot",
       "note": "Ezoic publisher-platform crawler",
       "url": "https://www.ezoic.com/bot"
     },
     "turnitinbot": {
       "kind": "tool",
+      "ua": "TurnitinBot",
       "note": "Turnitin plagiarism-detection crawler",
       "url": "https://www.turnitin.com/robot/crawlerinfo.html"
     },
     "uptimerobot": {
       "kind": "noeffect",
+      "ua": "UptimeRobot",
       "note": "UptimeRobot uptime checks of URLs the site owner sets up. Monitors like this usually don’t read robots.txt",
       "url": "https://help.uptimerobot.com/en/articles/11358489-what-is-the-uptimerobot-user-agent-string"
     },
     "statuscake": {
       "kind": "noeffect",
+      "ua": "StatusCake",
       "note": "StatusCake uptime checks of URLs the site owner sets up. Monitors like this usually don’t read robots.txt",
       "url": "https://www.statuscake.com/kb/knowledge-base/testing-websites-using-incapsula/"
     },
     "better": {
       "kind": "noeffect",
+      "ua": "Better Uptime Bot",
       "note": "Better Stack uptime checks of URLs the site owner sets up. Monitors like this usually don’t read robots.txt",
       "url": "https://betterstack.com/docs/uptime/frequently-asked-questions"
     },
     "qwantbot": {
       "kind": "searchengine",
+      "ua": "Qwantbot",
       "note": "Qwant search (France)",
       "url": "https://help.qwant.com/hc/fr-fr/articles/51146433634833-Le-bot-Qwant-QwantBot-et-le-fichier-robots-txt"
     },
     "qwantbot-news": {
       "kind": "searchengine",
+      "ua": "Qwantbot-news",
       "note": "Qwant News (France)",
       "url": "https://help.qwant.com/hc/fr-fr/articles/51146433634833-Le-bot-Qwant-QwantBot-et-le-fichier-robots-txt"
     },
     "mojeekbot": {
       "kind": "searchengine",
+      "ua": "MojeekBot",
       "note": "Mojeek independent search engine",
       "url": "https://www.mojeek.com/bot.html"
     },
     "seznambot": {
       "kind": "searchengine",
+      "ua": "SeznamBot",
       "note": "Seznam.cz search (Czech Republic)",
       "url": "https://o-seznam.cz/napoveda/vyhledavani/en/seznambot-crawler/"
     },
     "duckduckbot": {
       "kind": "searchengine",
+      "ua": "DuckDuckBot",
       "note": "DuckDuckGo search crawler",
       "url": "https://duckduckgo.com/duckduckgo-help-pages/results/duckduckbot"
     },
     "kagibot": {
       "kind": "searchengine",
+      "ua": "Kagibot",
       "note": "Kagi search. If not named, it follows your Googlebot rules",
       "url": "https://kagi.com/bot"
     },
     "search.marginalia.nu": {
       "kind": "searchengine",
+      "ua": "search.marginalia.nu",
       "note": "Marginalia independent search engine",
       "url": "https://www.marginalia.nu/marginalia-search/for-webmasters/"
     },
     "coccocbot": {
       "kind": "searchengine",
+      "ua": "coccocbot",
       "note": "Coc Coc search (Vietnam); covers all Coc Coc robots",
       "url": "https://coccoc.com/search/console/en/coc-coc-robots"
     },
     "coccocbot-web": {
       "kind": "searchengine",
+      "ua": "coccocbot-web",
       "note": "Coc Coc search (Vietnam), main web crawler",
       "url": "https://coccoc.com/search/console/en/coc-coc-robots"
     },
     "yeti": {
       "kind": "searchengine",
+      "ua": "Yeti",
       "note": "Naver search (South Korea)",
       "url": "https://searchadvisor.naver.com/guide/seo-basic-firewall"
     },
     "slurp": {
       "kind": "searchengine",
+      "ua": "Slurp",
       "note": "Yahoo Search; also collects partner content for Yahoo News, Finance and Sports",
       "url": "https://help.yahoo.com/kb/SLN22600.html"
     },
     "adsbot-google": {
       "kind": "ads",
+      "ua": "AdsBot-Google",
       "note": "Google Ads landing-page quality checks. Ignores * rules, so it must be named to be blocked",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
     },
     "adsbot-google-mobile": {
       "kind": "ads",
+      "ua": "AdsBot-Google-Mobile",
       "note": "Google Ads mobile landing-page checks. Ignores * rules, so it must be named to be blocked",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
     },
     "adsbot-google-mobile-apps": {
       "kind": "legacy",
+      "ua": "AdsBot-Google-Mobile-Apps",
       "note": "Retired Google Ads crawler for Android app pages. Harmless, but has no effect",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
     },
     "duplexweb-google": {
       "kind": "legacy",
+      "ua": "DuplexWeb-Google",
       "note": "Retired crawler for Google’s Duplex on the web. Harmless, but has no effect",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
     },
     "googleweblight": {
       "kind": "legacy",
+      "ua": "googleweblight",
       "note": "Retired Google Web Light. Harmless, but has no effect",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
     },
     "storebot-google": {
       "kind": "documented",
+      "ua": "Storebot-Google",
       "note": "Google Shopping crawler. Not Search ranking, not AI",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers"
     },
     "google-inspectiontool": {
       "kind": "documented",
+      "ua": "Google-InspectionTool",
       "note": "Google Search testing tools, such as URL Inspection and the Rich Results Test",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers"
     },
     "googlebot-video": {
       "kind": "documented",
+      "ua": "Googlebot-Video",
       "note": "Video features in Google Search. Not a training control",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers"
     },
     "googlebot-news": {
       "kind": "news",
+      "ua": "Googlebot-News",
       "note": "Google News. A robots.txt name only: the fetching is done by Googlebot",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers"
     },
     "slackbot-linkexpanding": {
       "kind": "ignores",
+      "ua": "Slackbot-LinkExpanding",
       "note": "Slack link previews. Slack says it doesn’t honour robots.txt",
       "url": "https://api.slack.com/robots"
     },
     "slackbot": {
       "kind": "ignores",
+      "ua": "Slackbot",
       "note": "Slack’s general-purpose fetcher. Slack says it doesn’t honour robots.txt",
       "url": "https://api.slack.com/robots"
     },
     "slack-imgproxy": {
       "kind": "documented",
+      "ua": "Slack-ImgProxy",
       "note": "Slack image proxy for images posted in Slack",
       "url": "https://api.slack.com/robots"
     },
     "discordbot": {
       "kind": "documented",
+      "ua": "Discordbot",
       "note": "Discord link previews",
       "url": "https://support.discord.com/hc/en-us/articles/42500550752919-About-Discord-Link-Previews-and-the-Discordbot"
     },
     "pinterestbot": {
       "kind": "documented",
+      "ua": "Pinterestbot",
       "note": "Pinterest crawler for Pin content and product details",
       "url": "https://help.pinterest.com/en/business/article/pinterest-crawler"
     },
@@ -1381,76 +1495,91 @@
     },
     "pressenginebot": {
       "kind": "ignores",
+      "ua": "PressEngineBot",
       "note": "PressEngine coverage tracking for video-game PR. PressEngine says it doesn’t follow robots.txt",
       "url": "https://pressengine.net/crawl-policy"
     },
     "archive.org_bot": {
       "kind": "archive",
+      "ua": "archive.org_bot",
       "note": "Internet Archive and Archive-It. Follows robots.txt by default; Archive-It customers can override it",
       "url": "https://support.archive-it.org/hc/en-us/articles/10564861588500-Troubleshooting-robots-txt-exclusions"
     },
     "bnf.fr_bot": {
       "kind": "ignores",
+      "ua": "bnf.fr_bot",
       "note": "French National Library web archive. As a legal-deposit crawler it is allowed to disregard robots.txt",
       "url": "https://www.bnf.fr/en/your-website-harvested-bnfs-robot"
     },
     "bl.uk_lddc_bot": {
       "kind": "archive",
+      "ua": "bl.uk_lddc_bot",
       "note": "UK Web Archive legal-deposit crawler. Generally follows robots.txt, but may overrule it",
       "url": "https://www.nls.uk/about-us/who-and-what/legal-deposit/web-harvesting/"
     },
     "arquivo-web-crawler": {
       "kind": "archive",
+      "ua": "Arquivo-web-crawler",
       "note": "Arquivo.pt, the Portuguese national web archive",
       "url": "https://sobre.arquivo.pt/en/help/crawling-and-archiving-web-content/"
     },
     "nlux_iaharvester": {
       "kind": "archive",
+      "ua": "NLUX_IAHarvester",
       "note": "National Library of Luxembourg web archive",
       "url": "https://bnl.public.lu/en/offres-numeriques/webarchive.html"
     },
     "nlnbot": {
       "kind": "archive",
+      "ua": "NLNbot",
       "note": "National Library of Norway web archive",
       "url": "https://www.nb.no/en/collection/web-archive/technology/"
     },
     "feedly": {
       "kind": "ignores",
+      "ua": "Feedly",
       "note": "Feedly RSS reader’s feed fetcher. Feedly says it doesn’t follow robots.txt",
       "url": "https://feedly.com/fetcher.html"
     },
     "inoreader": {
       "kind": "ignores",
+      "ua": "Inoreader",
       "note": "Inoreader RSS reader’s feed fetcher. Inoreader says it doesn’t read robots.txt",
       "url": "https://www.inoreader.com/feed-fetcher"
     },
     "feedfetcher-google": {
       "kind": "ignores",
+      "ua": "FeedFetcher-Google",
       "note": "Google’s RSS and Atom fetcher for Google News and WebSub. Google says it ignores robots.txt",
       "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/feedfetcher"
     },
     "flipboardproxy": {
       "kind": "news",
+      "ua": "FlipboardProxy",
       "note": "Flipboard fetching pages for the Flipboard app",
       "url": "https://about.flipboard.com/proxy-service/"
     },
     "aolbot-news": {
       "kind": "news",
+      "ua": "AolBot-News",
       "note": "AOL news article crawler",
       "url": "https://help.aol.com/articles/aolbot"
     },
     "newscrawler": {
       "kind": "news",
+      "ua": "NewsCrawler",
       "note": "Newstex content-licensing feed crawler",
       "url": "https://www.newstex.com/documentations/newstex-newscrawler-bot"
     },
     "at-bot": {
       "kind": "documented",
+      "ua": "AT-Bot",
       "note": "nic.at (.at domain registry) start-page fetcher, Austria",
       "url": "https://www.nic.at/en/good_to_know/technology/at-bot"
     },
     "cert.at-crawler": {
       "kind": "documented",
+      "ua": "CERT.at-crawler",
       "note": "CERT.at security crawler of .at start pages, Austria",
       "url": "https://www.cert.at/en/services/crawler/"
     }
@@ -1468,7 +1597,6 @@
     "noeffect": "likely no effect",
     "caution": "caution",
     "unknown": "unknown",
-    "documented": "documented",
     "signal": "preference signal",
     "tool": "tool",
     "aidata": "AI data",

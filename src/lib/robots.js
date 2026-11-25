@@ -1,12 +1,11 @@
-// robots.txt parsing, evaluation and generation. No DOM: app.js renders the results.
-import {data, POLICY, GEN_CATS, companyOrder, inCat, inGenCat, tableBots} from './catalog.js';
+// robots.txt parsing, evaluation and generation. No DOM: the components render the results.
+import {data, POLICY, GEN_CATS, companyOrder, inCat, inGenCat, isEngine, tableBots} from './catalog.js';
 
 const GOOGLE_FALLBACK = {'googlebot-image': ['Googlebot'], 'googlebot-video': ['Googlebot'], 'googlebot-news': ['Googlebot']};
 const UA_KEYS = ['user-agent', 'useragent', 'user agent'];
 const DIS_KEYS = ['disallow', 'dissallow', 'dissalow', 'disalow', 'diasllow', 'disallaw'];
 const NOT_DIRECTIVES = ['noindex', 'nofollow', 'noarchive', 'noai', 'noimageai'];
 const SILENT_KEYS = ['host', 'request-rate', 'visit-time', 'clean-param'];
-const EXTRA_NOTES = data.userAgentNotes;
 // Stands in for "any characters" in probe paths; a private-use character no real path contains
 const SENTINEL = '\uE000';
 
@@ -24,6 +23,8 @@ function norm(ua) {
 
 // Name up to the first slash or space, for looking up this tool's notes
 const full = (ua) => String(ua).trim().split(/[\/\s]/)[0].toLowerCase();
+// The user-agent table's entries by their user-agent's name; the keys in the data are only IDs
+const EXTRA_NOTES = new Map(Object.values(data.userAgentNotes).map(n => [full(n.ua), n]));
 
 export function parseRobots(text) {
   const groups = [], warnings = [], signals = [], sitemaps = [];
@@ -146,9 +147,13 @@ export function evaluate(rules) {
   return out;
 }
 
-const PURPOSE = [['train', 'Training'], ['search', 'Search'], ['fetch', 'User-requested fetch']];
+// A catalog bot's purposes, in the words of the company table's columns. The regular search engines are search
+// bots there, but named as what they are here.
+const PURPOSE = [['train', 'training'], ['search', 'AI search'], ['fetch', 'user-requested fetch']];
+const purposes = (b) => isEngine(b) ? 'search engine' : PURPOSE.filter(([c]) => inCat(b, c)).map(([, l]) => l).join(' · ');
 
-// companies: the catalog with each bot's result. named: every user-agent the file names, with a note on what it is.
+// companies: the catalog with each bot's result. named: every user-agent the file names, with a note on what it is
+// and, for the catalog's bots, a tag with its purposes.
 export function analyze(text) {
   const parsed = parseRobots(text);
   const known = new Map();
@@ -167,13 +172,14 @@ export function analyze(text) {
     if (seen.has(n)) continue;
     seen.add(n);
     const ev = evaluate(rulesFor(a, parsed).rules);
-    const k = known.get(full(a)), x = EXTRA_NOTES[full(a)];
-    let kind = 'unknown', note = 'Not in this tool’s list. Check the operator’s documentation';
+    const k = known.get(full(a)), x = EXTRA_NOTES.get(full(a));
+    let kind = 'unknown', note = 'Not in this tool’s list. Check the operator’s documentation', tag;
     if (k) {
       kind = k.ignores ? 'ignores' : k.caution ? 'caution' : 'documented';
-      note = k.ignores || k.caution || k.note || PURPOSE.filter(([c]) => inCat(k, c)).map(([, l]) => l).join(' and ') + ' bot';
+      note = k.ignores || k.caution || k.note || '';
+      tag = purposes(k);
     } else if (x) {kind = x.kind; note = x.note;}
-    named.push({ua: a, ...ev, kind, note, src: k ? k.src : undefined, url: !k && x ? x.url : undefined});
+    named.push({ua: a, ...ev, kind, note, tag, src: k ? k.src : undefined, url: !k && x ? x.url : undefined});
   }
   return {parsed, companies, named};
 }
