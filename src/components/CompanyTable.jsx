@@ -91,7 +91,9 @@ const CautionMark = ({kind, children}) => <span className={kind ? `caut ${kind}`
 </span>;
 
 export default function CompanyTable({companies, ...chip}) {
-  return <table className="stack">
+  // Fixed layout: the purpose columns share what the company column leaves equally, whatever their chips
+  return <table className="stack co-table">
+    <colgroup><col className="co" />{CATS.map(([k]) => <col key={k} />)}</colgroup>
     <thead><tr>{COLUMNS.map(c => <th key={c}>{c}</th>)}</tr></thead>
     <tbody>
       <tr className="sec"><td colSpan={4}>Major players</td></tr>

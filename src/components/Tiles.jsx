@@ -1,4 +1,5 @@
-// One tile per purpose: how many of its bots are blocked, with a bar of blocked, partial and allowed.
+// One tile per purpose, and one for SEO tools: how many of its bots are blocked, with a bar of blocked, partial and
+// allowed.
 import {inCat} from '../lib/catalog.js';
 import {CATS, isDef} from '../lib/page.js';
 
@@ -25,6 +26,10 @@ function Tile({all, k, name}) {
   </div>;
 }
 
-export default function Tiles({all}) {
-  return <div className="tiles">{CATS.map(([k, name]) => <Tile key={k} all={all} k={k} name={name} />)}</div>;
+// all: the catalog's bots with their results. gen: those plus the user-agent table's, where the SEO tools are.
+export default function Tiles({all, gen}) {
+  return <div className="tiles">
+    {CATS.map(([k, name]) => <Tile key={k} all={all} k={k} name={name} />)}
+    <Tile all={gen} k="seo" name="SEO tools" />
+  </div>;
 }

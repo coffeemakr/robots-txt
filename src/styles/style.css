@@ -141,7 +141,7 @@ button {
 
 .tiles {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px
 }
 
@@ -267,6 +267,15 @@ tr.sec td {
 th.co {
   font: 600 16px var(--sans);
   color: var(--ink);
+  width: 16%
+}
+
+/* Company table: the company column is set, the purpose columns split the rest equally */
+.co-table {
+  table-layout: fixed
+}
+
+.co-table col.co {
   width: 16%
 }
 
@@ -744,6 +753,10 @@ code {
 @media(max-width:600px) {
   table {
     font-size: 13px
+  }
+
+  .co-table {
+    table-layout: auto
   }
 
   .stack thead {

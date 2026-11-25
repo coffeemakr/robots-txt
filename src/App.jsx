@@ -162,7 +162,7 @@ export default function App() {
       <InputPanel text={text} onText={onText} onDropFile={onDropFile} onClear={onClear} onDownload={onDownload}
         srcRef={srcRef} srcStatus={srcStatus} picked={picked} onSet={onSet} status={genStatus} onUndo={onUndo} />
       <div style={{display: 'flex', flexDirection: 'column', gap: 12}}>
-        <Tiles all={view.all} />
+        <Tiles all={view.all} gen={view.gen} />
         <SignalsPanel a={view.a} gen={view.gen} onAct={onAct} status={sigStatus} onUndo={onUndo} />
       </div>
     </Section>

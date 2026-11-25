@@ -19,13 +19,17 @@ export const ico = (x) => mostly(x) ? '◕' : ICON[x.status];
 export const rulesSig = (x) => x.blocked.slice().sort().join('\n') + '|' + x.open.slice().sort().join('\n');
 
 // Everything the page shows about text. all: every catalog bot with its result. gen: those plus the bots from the
-// user-agent table, which the generator also covers but the tiles and tables don't. starSig: rulesSig of the * group.
+// user-agent table, which the generator and the SEO tools tile also cover but the tables don't. starSig: rulesSig
+// of the * group.
 export function inspect(text) {
   const a = analyze(text);
   const all = a.companies.flatMap(c => c.bots);
   const star = a.parsed.groups.filter(g => g.agents.includes('*'));
   const starSig = star.length ? rulesSig(evaluate(star.flatMap(g => g.rules))) : null;
-  const gen = [...all, ...tableBots.map(b => ({...b, ...evaluate(rulesFor(b.ua, a.parsed, b.fallback).rules)}))];
+  const gen = [...all, ...tableBots.map(b => {
+    const r = rulesFor(b.ua, a.parsed, b.fallback);
+    return {...b, ...evaluate(r.rules), via: r.via, named: r.named};
+  })];
   return {a, all, gen, starSig};
 }
 
