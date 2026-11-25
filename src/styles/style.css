@@ -413,6 +413,17 @@ th.co {
   text-align: center
 }
 
+/* Bot chips in the company table are three-way buttons for what the generated block does with the bot */
+.chip.tog {
+  min-height: 0;
+  text-align: left;
+  cursor: pointer
+}
+
+.chip.tog:hover {
+  box-shadow: 0 0 0 2px var(--pink)
+}
+
 .chip.ic {
   min-width: 36px;
   min-height: 30px;
@@ -615,33 +626,67 @@ ul.warn li {
   margin-bottom: 2px
 }
 
-.genrow {
+/* Generator: one row per category, with a three-way switch: Not set, Block, Allow */
+.gencats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0 4px
+}
+
+.gencat {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 20px
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px
 }
 
-.check {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 6px 0;
-  cursor: pointer;
-  line-height: 1.4
+.gcname {
+  line-height: 1.3
 }
 
-.check input {
-  flex: none;
-  width: 18px;
-  height: 18px;
-  margin: 1px 0 0;
-  accent-color: var(--pink);
-  cursor: pointer
+/* Bots set one by one in different ways: no button is pressed */
+.gencat.mixed .gcname::after {
+  content: " (mixed)";
+  color: var(--muted)
 }
 
-.check input:focus-visible {
-  outline: 3px solid var(--ink);
-  outline-offset: 2px
+.seg {
+  display: inline-flex
+}
+
+.seg button {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 14px;
+  border-radius: 0;
+  margin-left: -1px
+}
+
+.seg button:first-child {
+  border-radius: 8px 0 0 8px;
+  margin-left: 0
+}
+
+.seg button:last-child {
+  border-radius: 0 8px 8px 0
+}
+
+.seg button:focus-visible {
+  position: relative
+}
+
+.seg button[aria-pressed=true] {
+  background: var(--ink);
+  color: var(--card)
+}
+
+.seg button[data-set=block][aria-pressed=true] {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: #06222e;
+  position: relative
 }
 
 .gen .hint button {

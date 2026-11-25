@@ -11,8 +11,8 @@ import Notes from '../components/Notes.astro';
   <Section as="header" style="padding-bottom:12px">
     <h1>robots.txt AI check</h1>
     <p class="lede">Paste a robots.txt to see, for each AI company, whether training, AI search and user-requested
-      fetches are blocked, partly blocked or allowed, and which named bots ignore robots.txt anyway. Or tick what to
-      block and get a robots.txt that does it.</p>
+      fetches are blocked, partly blocked or allowed, and which named bots ignore robots.txt anyway. Or choose what to
+      block or allow and get a robots.txt that does it.</p>
   </Section>
 
   <Section style="padding-top:12px" wrapClass="top">
@@ -29,6 +29,8 @@ import Notes from '../components/Notes.astro';
   <Section title="By company">
     <p class="hint" id="sortnote" style="margin:-4px 0 0">Major players are sorted by share of AI referral traffic in
       2026, then alphabetically; others alphabetically.</p>
+    <p class="hint" style="margin:4px 0 0">Click a bot to switch what the generated block of the robots.txt above does
+      with it: block it, allow it, or leave it to the rest of the file.</p>
     <Legend />
     <p class="oleg" id="openleg"></p>
     <StackTable id="matrix" columns={['Company', 'Training', 'AI search', 'User-requested fetch']} />

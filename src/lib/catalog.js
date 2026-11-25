@@ -8,11 +8,12 @@ export const POLICY = data.aiTrainingToken;
 export const GEN_CATS = [['train', 'AI training'], ['search', 'AI search'], ['fetch', 'User-requested fetches'],
   ['seo', 'SEO tools'], ['intel', 'Media monitoring']];
 
-// Bots from the user-agent table the builder can block, by kind (its section): only those with an operator page,
-// to show they're documented.
+// Bots from the user-agent table the builder can block: only those with an operator page, to show they're
+// documented. An entry's kind picks its section (AI data crawlers count as AI training); `cat` overrides that.
+const KIND_CAT = {seo: 'seo', intel: 'intel', aidata: 'train'};
 export const tableBots = Object.values(data.userAgentNotes)
-  .filter(n => GEN_CATS.some(([c]) => c === n.kind) && n.url && n.ua)
-  .map(n => ({ua: n.ua, cat: n.kind, fallback: n.fallback}));
+  .filter(n => (n.cat || KIND_CAT[n.kind]) && n.url && n.ua)
+  .map(n => ({ua: n.ua, cat: n.cat || KIND_CAT[n.kind], fallback: n.fallback}));
 
 // Whether a bot serves a purpose. A bot's `cat` is one purpose, or a list when it serves several (Bytespider).
 export const inCat = (b, cat) => Array.isArray(b.cat) ? b.cat.includes(cat) : b.cat === cat;

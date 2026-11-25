@@ -1,6 +1,6 @@
 ---
-// Where the robots.txt to check comes from: a domain lookup, the generator's tick boxes, the text box or a dropped
-// file. app.js ticks the boxes to match the file in the text box.
+// Where the robots.txt to check comes from: a domain lookup, the generator's buttons, the text box or a dropped
+// file. app.js presses the buttons to match the generated block in the text box.
 import { GEN_CATS } from '../lib/catalog.js';
 ---
 
@@ -18,17 +18,21 @@ import { GEN_CATS } from '../lib/catalog.js';
       that, so it opens in a new tab instead: select everything there, copy it, and paste it below.</p>
   </form>
   <fieldset class="gen" id="gen" aria-describedby="gennote">
-    <legend>Or generate one that blocks</legend>
-    <div class="genrow">
+    <legend>Or generate one</legend>
+    <div class="gencats">
       {GEN_CATS.map(([cat, title]) => (
-        <label class="check"><input type="checkbox" data-cat={cat}><span>{title}</span></label>
+        <div class="gencat" role="group" aria-labelledby={`gc-${cat}`} data-cat={cat}>
+          <span class="gcname" id={`gc-${cat}`}>{title}</span>
+          <span class="seg">
+            <button type="button" data-set="unset" aria-pressed="true">Not set</button>
+            <button type="button" data-set="block" aria-pressed="false">Block</button>
+            <button type="button" data-set="allow" aria-pressed="false">Allow</button>
+          </span>
+        </div>
       ))}
     </div>
-    <p class="hint" id="gennote" style="margin-top:2px">If the box below holds your own robots.txt, adds a block
-      between <code># BEGIN</code> and <code># END</code> comments and leaves the rest of it alone; otherwise replaces
-      the text. AI search also blocks Googlebot,
-      Bingbot, Applebot and PetalBot, since their crawls feed AI answers too, so the site leaves regular search
-      results as well. SEO tools and Media monitoring cover the crawlers of those kinds whose operators document them.</p>
+    <p class="hint" id="gennote" style="margin-top:2px">Edits a marked block in your robots.txt below, or writes a new
+      one. Blocking AI search also blocks Googlebot and Bingbot. For single bots, click them in the table.</p>
     <p class="hint" id="genstatus" role="status"></p>
   </fieldset>
   <label for="src" style="font-weight:600">Your robots.txt</label>

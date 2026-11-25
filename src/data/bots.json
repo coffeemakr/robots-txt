@@ -795,15 +795,17 @@
     },
     "aihitbot": {
       "kind": "aidata",
-      "note": "aiHit company data for AI systems (community lists)"
+      "note": "aiHit company-data crawler (community lists); aiHit’s site doesn’t document it"
     },
     "cotoyogi": {
-      "kind": "aidata",
-      "note": "ROIS (Japan) crawler for Japanese-language AI training (community lists)"
+      "kind": "documented",
+      "note": "ROIS-DS (Japan) crawler collecting Japanese-language data. Community lists call it an AI scraper; ROIS doesn’t say so",
+      "url": "https://ds.rois.ac.jp/en_center8/en_crawler/"
     },
     "crawlspace": {
-      "kind": "aidata",
-      "note": "Crawling platform supplying AI agents and RAG apps (community lists)"
+      "kind": "tool",
+      "note": "Crawlspace platform where developers run crawlers for apps, AI agents and RAG. Blocking it blocks them all",
+      "url": "https://www.crawlspace.dev/"
     },
     "factset_spyderbot": {
       "kind": "aidata",
@@ -815,15 +817,20 @@
     },
     "icc-crawler": {
       "kind": "aidata",
-      "note": "NICT (Japan) crawler for AI research, shared with third parties (community lists)"
+      "ua": "ICC-Crawler",
+      "note": "NICT (Japan) crawler for research including AI; data may be shared with companies and other third parties",
+      "url": "https://ucri.nict.go.jp/en/icccrawler.html"
     },
     "kangaroo": {
       "kind": "aidata",
-      "note": "Kangaroo LLM: training data for an Australian language model (community lists)"
+      "ua": "Kangaroo Bot",
+      "note": "Kangaroo LLM: Australian content for its training dataset. Its website is now offline (archived page linked)",
+      "url": "https://web.archive.org/web/20260713182317/https://kangaroollm.com.au/kangaroo-bot/"
     },
     "qualifiedbot": {
-      "kind": "aidata",
-      "note": "Qualified: context for AI sales chatbots (community lists)"
+      "kind": "documented",
+      "note": "Qualified crawls its customers’ websites to power its AI sales products. Its page doesn’t mention robots.txt",
+      "url": "https://www.qualified.com/legal/qualified-crawler-user-agent"
     },
     "sidetrade": {
       "kind": "aidata",
@@ -835,19 +842,27 @@
     },
     "velenpublicwebcrawler": {
       "kind": "aidata",
-      "note": "Velen: business datasets and machine-learning models (community lists)"
+      "ua": "VelenPublicWebCrawler",
+      "note": "Velen crawler for Hunter, building business datasets and machine-learning models",
+      "url": "https://velen.io/"
     },
     "wpbot": {
       "kind": "aidata",
-      "note": "AI chatbot plugin for WordPress (community lists)"
+      "note": "Community lists link it to a WordPress AI chatbot plugin, but its opt-out form was made at Plesk. Undocumented"
     },
     "semrushbot-ocob": {
       "kind": "aidata",
-      "note": "Semrush ContentShake AI tool"
+      "ua": "SemrushBot-OCOB",
+      "cat": "fetch",
+      "note": "Semrush ContentShake AI tool, fetching pages for AI-written content",
+      "url": "https://www.semrush.com/bot/"
     },
     "semrushbot-swa": {
       "kind": "aidata",
-      "note": "Semrush SEO Writing Assistant"
+      "ua": "SemrushBot-SWA",
+      "cat": "fetch",
+      "note": "Semrush SEO Writing Assistant, checking pages for its AI writing tool",
+      "url": "https://www.semrush.com/bot/"
     },
     "mediapartners-google": {
       "kind": "ads",
