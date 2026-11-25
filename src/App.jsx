@@ -107,15 +107,20 @@ export default function App() {
   };
 
   // A category's button sets all its bots in the generated block. Not set takes them out, except bots it shares
-  // with a category (Bytespider is in two) that has something set: those are the other category's to change.
+  // with a category (Bytespider is in two) that is blocked or allowed as a whole: those go back to that category's
+  // setting. Left as they were, they'd keep what this category gave them, with no button showing it.
   const onSet = (cat, to) => {
     const p = readBlock(text);
-    const held = new Set(GEN_CATS.filter(([c]) => c !== cat && catState(c, p) !== 'unset').flatMap(([c]) => catBots(c)));
+    const kept = new Map();
+    for (const [c] of GEN_CATS) {
+      const s = c !== cat && catState(c, p);
+      if (s === 'block' || s === 'allow') catBots(c).forEach(u => kept.set(u, s));
+    }
     for (const u of catBots(cat)) {
-      if (to === 'unset' && held.has(u)) continue;
+      const now = to === 'unset' ? kept.get(u) : to;
       p.block.delete(u); p.allow.delete(u);
-      if (to === 'block') p.block.add(u);
-      if (to === 'allow') p.allow.add(u);
+      if (now === 'block') p.block.add(u);
+      if (now === 'allow') p.allow.add(u);
     }
     regen(p.block, p.allow, {cleared: to === 'unset' ? cat : null});
   };
