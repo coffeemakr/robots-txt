@@ -1,0 +1,1467 @@
+{
+  "aiTrainingToken": "__usage_ai-training",
+  "sources": [
+    {
+      "id": "seranking",
+      "title": "SE Ranking: AI traffic study 2026 (share of AI referral traffic)",
+      "url": "https://seranking.com/blog/ai-traffic-research-study/"
+    },
+    {
+      "id": "knownagents-qwen",
+      "title": "Known Agents: QwenBot (robots.txt compliance measured across tracked sites, November 2026)",
+      "url": "https://knownagents.com/agents/qwenbot"
+    },
+    {
+      "id": "openai",
+      "title": "OpenAI: Overview of OpenAI crawlers",
+      "url": "https://developers.openai.com/api/docs/bots"
+    },
+    {
+      "id": "google-fetchers",
+      "title": "Google: User-triggered fetchers",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-user-triggered-fetchers"
+    },
+    {
+      "id": "meta",
+      "title": "Meta: Web crawlers",
+      "url": "https://developers.facebook.com/docs/sharing/webmasters/web-crawlers"
+    },
+    {
+      "id": "amazon",
+      "title": "Amazon: Amazonbot, Amzn-SearchBot and Amzn-User",
+      "url": "https://developer.amazon.com/amazonbot"
+    },
+    {
+      "id": "perplexity",
+      "title": "Perplexity: Perplexity crawlers",
+      "url": "https://docs.perplexity.ai/guides/perplexitybot"
+    },
+    {
+      "id": "kimi",
+      "title": "Kimi: Kimi crawlers",
+      "url": "https://www.kimi.ai/policies/kimi-crawlers"
+    },
+    {
+      "id": "bytespider-search",
+      "title": "IBTimes UK: ByteDance accused of using UK news sites to train its ChatGPT rival (December 2023; ByteDance says Bytespider is used for “search optimisation”)",
+      "url": "https://www.ibtimes.co.uk/chinas-bytedance-accused-using-uk-news-sites-train-its-chatgpt-rival-1722235"
+    },
+    {
+      "id": "meta-muse",
+      "title": "The Batch: With Muse Spark, Meta pivots away from its open-weights Llama strategy (April 2026)",
+      "url": "https://www.deeplearning.ai/the-batch/with-muse-spark-meta-pivots-away-from-its-open-weights-llama-strategy"
+    },
+    {
+      "id": "xai-grok",
+      "title": "TechCrunch: xAI releases Grok 2.5 weights on Hugging Face",
+      "url": "https://techcrunch.com/?p=3039360"
+    },
+    {
+      "id": "qwen35",
+      "title": "Simon Willison: Qwen3.5, one open-weights and one proprietary model (February 2026)",
+      "url": "https://simonwillison.net/b/9297"
+    },
+    {
+      "id": "seed-oss",
+      "title": "ByteDance Seed: Seed-OSS open-source models release",
+      "url": "https://seed.bytedance.com/en/blog/seed-oss-open-source-models-release"
+    },
+    {
+      "id": "openpangu",
+      "title": "Open Source For You: Huawei open-sources 505B openPangu",
+      "url": "https://www.opensourceforu.com/?p=101661"
+    },
+    {
+      "id": "zai-license",
+      "title": "The New Stack: GLM-5.3 goes open weight with a new license (August 2026)",
+      "url": "https://thenewstack.io/zai-glm-weights-license/"
+    }
+  ],
+  "openness": {
+    "data": {
+      "label": "Open data",
+      "description": "Weights and training data published"
+    },
+    "weights": {
+      "label": "Open weights",
+      "description": "Weights published, training data not"
+    },
+    "mixed": {
+      "label": "Mixed",
+      "description": "Flagship models closed, some models with open weights"
+    },
+    "closed": {
+      "label": "Closed",
+      "description": "No model weights published"
+    },
+    "none": {
+      "label": "No own models",
+      "description": "Uses other companies’ models"
+    },
+    "provider": {
+      "label": "Data provider",
+      "description": "Supplies training data rather than models"
+    }
+  },
+  "companies": [
+    {
+      "name": "OpenAI",
+      "open": {
+        "kind": "mixed",
+        "why": "GPT models closed; gpt-oss open weights (Apache 2.0)"
+      },
+      "major": true,
+      "share": 74.78,
+      "bots": [
+        {
+          "ua": "GPTBot",
+          "cat": "train"
+        },
+        {
+          "ua": "OAI-SearchBot",
+          "cat": "search",
+          "note": "ChatGPT search answers"
+        },
+        {
+          "ua": "ChatGPT-User",
+          "cat": "fetch",
+          "ignores": "OpenAI says robots.txt rules “may not apply” to user-initiated fetches",
+          "src": "openai"
+        }
+      ]
+    },
+    {
+      "name": "Anthropic",
+      "open": {
+        "kind": "closed",
+        "why": "Claude models closed"
+      },
+      "major": true,
+      "share": 2.62,
+      "bots": [
+        {
+          "ua": "ClaudeBot",
+          "cat": "train",
+          "fallback": [
+            "__usage_ai-training"
+          ],
+          "note": "If not named, Anthropic applies your __usage_ai-training rules"
+        },
+        {
+          "ua": "Claude-SearchBot",
+          "cat": "search"
+        },
+        {
+          "ua": "Claude-User",
+          "cat": "fetch"
+        }
+      ]
+    },
+    {
+      "name": "Google",
+      "open": {
+        "kind": "mixed",
+        "why": "Gemini closed; Gemma open weights"
+      },
+      "major": true,
+      "share": 11.56,
+      "bots": [
+        {
+          "ua": "Google-Extended",
+          "cat": "train",
+          "fallback": [
+            "__usage_ai-training"
+          ],
+          "note": "A setting, not a crawler; also covers Gemini grounding. If not named, Google plans to apply __usage_ai-training rules from early 2027"
+        },
+        {
+          "ua": "Googlebot",
+          "cat": "search",
+          "note": "Google Search, including AI Overviews and AI Mode"
+        },
+        {
+          "ua": "Google-Agent",
+          "cat": "fetch",
+          "ignores": "Google says its user-triggered fetchers “generally ignore robots.txt rules”",
+          "src": "google-fetchers"
+        },
+        {
+          "ua": "Google-GeminiNotebook",
+          "cat": "fetch",
+          "ignores": "Google says its user-triggered fetchers “generally ignore robots.txt rules”",
+          "src": "google-fetchers"
+        }
+      ]
+    },
+    {
+      "name": "Microsoft",
+      "open": {
+        "kind": "mixed",
+        "why": "MAI models closed; Phi open weights"
+      },
+      "major": true,
+      "share": 3.51,
+      "bots": [
+        {
+          "ua": "__usage_ai-training",
+          "cat": "train",
+          "label": "Bingbot (training)",
+          "fallback": [
+            "Bingbot"
+          ],
+          "note": "Microsoft trains its own MAI models on pages Bingbot crawls. It honours __usage_ai-training from 1 Feb 2027; until then only blocking Bingbot stops this, which also removes you from Bing",
+          "link": [
+            "Microsoft data summary",
+            "https://microsoft.ai/pdf/MAI-Thinking-1-Data-Summary.pdf"
+          ]
+        },
+        {
+          "ua": "Bingbot",
+          "cat": "search",
+          "note": "Bing search and Copilot answers. Separate page-level grounding opt-out from 1 Feb 2027",
+          "link": [
+            "Bing AI preferences",
+            "https://www.bing.com/webmasters/help/new-ai-preferences-2t1cc16d"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Apple",
+      "open": {
+        "kind": "mixed",
+        "why": "Apple Foundation Models closed; OpenELM and DCLM released openly"
+      },
+      "major": true,
+      "bots": [
+        {
+          "ua": "Applebot-Extended",
+          "cat": "train",
+          "note": "A setting, not a crawler"
+        },
+        {
+          "ua": "Applebot",
+          "cat": "search",
+          "fallback": [
+            "Googlebot"
+          ],
+          "note": "Siri and Spotlight. If not named, follows your Googlebot rules"
+        }
+      ]
+    },
+    {
+      "name": "Meta",
+      "open": {
+        "kind": "mixed",
+        "why": "Muse Spark (April 2026) closed; earlier Llama models open weights",
+        "src": "meta-muse"
+      },
+      "major": true,
+      "bots": [
+        {
+          "ua": "meta-externalagent",
+          "cat": "train",
+          "note": "Training and product indexing"
+        },
+        {
+          "ua": "Meta-WebIndexer",
+          "cat": "search",
+          "note": "Meta AI citations"
+        },
+        {
+          "ua": "meta-externalfetcher",
+          "cat": "fetch",
+          "ignores": "Meta says it may bypass robots.txt for user-requested fetches",
+          "src": "meta"
+        }
+      ]
+    },
+    {
+      "name": "Amazon",
+      "open": {
+        "kind": "closed",
+        "why": "Nova weights not published; customers can train variants through Nova Forge"
+      },
+      "major": true,
+      "bots": [
+        {
+          "ua": "Amazonbot",
+          "cat": "train",
+          "note": "Amazon products and AI training"
+        },
+        {
+          "ua": "Amzn-SearchBot",
+          "cat": "search",
+          "fallback": [
+            "Googlebot"
+          ],
+          "note": "Not used for training. If not named, Amazon follows your rules for other search bots; your Googlebot rules stand in for those here"
+        },
+        {
+          "ua": "Amzn-User",
+          "cat": "fetch",
+          "ignores": "Amazon says it may not follow all robots.txt directives",
+          "src": "amazon"
+        },
+        {
+          "ua": "NovaAct",
+          "cat": "fetch",
+          "caution": "Amazon’s browser agent; robots.txt behaviour not documented"
+        }
+      ]
+    },
+    {
+      "name": "Perplexity",
+      "open": {
+        "kind": "none",
+        "why": "Builds on other companies’ models (Sonar is a fine-tune); no own foundation model"
+      },
+      "major": true,
+      "share": 7.23,
+      "trainNote": "Does not train foundation models",
+      "bots": [
+        {
+          "ua": "PerplexityBot",
+          "cat": "search"
+        },
+        {
+          "ua": "Perplexity-User",
+          "cat": "fetch",
+          "ignores": "Perplexity says it “generally ignores robots.txt rules”",
+          "src": "perplexity"
+        }
+      ]
+    },
+    {
+      "name": "Mistral",
+      "open": {
+        "kind": "mixed",
+        "why": "Many models open weights (Apache 2.0); some closed"
+      },
+      "major": true,
+      "bots": [
+        {
+          "ua": "MistralAI-Training",
+          "cat": "train"
+        },
+        {
+          "ua": "MistralAI-Index",
+          "cat": "search",
+          "note": "Mistral search; not used for training"
+        },
+        {
+          "ua": "MistralAI-User",
+          "cat": "fetch"
+        }
+      ]
+    },
+    {
+      "name": "Common Crawl",
+      "open": {
+        "kind": "provider",
+        "why": "Publishes its crawl as a free dataset used to train many models"
+      },
+      "major": true,
+      "bots": [
+        {
+          "ua": "CCBot",
+          "cat": "train",
+          "note": "Open dataset many AI labs train on"
+        }
+      ]
+    },
+    {
+      "name": "ByteDance",
+      "open": {
+        "kind": "mixed",
+        "why": "Doubao closed; Seed-OSS open weights (Apache 2.0)",
+        "src": "seed-oss"
+      },
+      "bots": [
+        {
+          "ua": "Bytespider",
+          "cat": [
+            "train",
+            "search"
+          ],
+          "caution": "Compliance disputed by independent monitoring",
+          "catNotes": {
+            "train": {
+              "text": "Use for AI training is reported by others but not confirmed"
+            },
+            "search": {
+              "text": "ByteDance says it is used for “search optimisation”",
+              "src": "bytespider-search"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Moonshot (Kimi)",
+      "open": {
+        "kind": "weights",
+        "why": "Kimi K2 models released as open weights (modified MIT)"
+      },
+      "bots": [
+        {
+          "ua": "KimiBot",
+          "cat": "train"
+        },
+        {
+          "ua": "Kimi-SearchBot",
+          "cat": "search"
+        },
+        {
+          "ua": "Kimi-User",
+          "cat": "fetch",
+          "ignores": "Kimi says robots.txt rules “may not directly apply”",
+          "src": "kimi"
+        }
+      ]
+    },
+    {
+      "name": "xAI (Grok)",
+      "open": {
+        "kind": "mixed",
+        "why": "Current Grok closed; older Grok 1 and 2.5 open weights",
+        "src": "xai-grok"
+      },
+      "bots": [],
+      "link": [
+        "xAI training summary",
+        "https://media.x.ai/v1/website/public-summary-of-training-content-for-grok-4.5_8jul2026.docx-fc25014a.pdf"
+      ],
+      "notes": {
+        "train": "Trains on web pages from its “xAI Web Crawler”, licensed and third-party datasets, X posts (not from EU users or those who opted out) and Grok chats. xAI publishes no robots.txt name, so robots.txt can’t target it",
+        "search": "Grok searches the web live; xAI publishes no bot name for this",
+        "fetch": "Grok’s browsing agent has no published bot name"
+      }
+    },
+    {
+      "name": "Proton (Lumo)",
+      "open": {
+        "kind": "none",
+        "why": "Lumo runs open models from others (Qwen, GLM, Apertus)"
+      },
+      "bots": [],
+      "link": [
+        "Lumo privacy",
+        "https://proton.me/support/lumo-privacy"
+      ],
+      "notes": {
+        "train": "Doesn’t train its own models or use chats. Runs open models (Qwen 3.5, GLM 5.2, Apertus) trained by their makers. Apertus left out sites that blocked AI crawlers as of January 2025, even in older crawls",
+        "search": "Web search goes through partner search APIs; no Lumo crawler",
+        "fetch": "No published bot name"
+      }
+    },
+    {
+      "name": "Swiss AI (Apertus)",
+      "open": {
+        "kind": "data",
+        "why": "Apertus weights, training data and code published"
+      },
+      "bots": [],
+      "link": [
+        "Apertus paper",
+        "https://aclanthology.org/2026.acl-long.2172/"
+      ],
+      "notes": {
+        "train": "No crawler of its own: trains on existing public web datasets. Sites whose robots.txt blocked AI crawlers in January 2025 were removed, even from older crawls",
+        "search": "A model only; no search bot",
+        "fetch": "A model only; no fetch bot"
+      }
+    },
+    {
+      "name": "Alibaba (Qwen)",
+      "open": {
+        "kind": "mixed",
+        "why": "Most Qwen models open weights (Apache 2.0); Max and Plus tiers hosted only",
+        "src": "qwen35"
+      },
+      "notes": {
+        "search": "No published search bot"
+      },
+      "bots": [
+        {
+          "ua": "QwenBot",
+          "cat": "train",
+          "documented": false,
+          "caution": "Name from community lists; Alibaba publishes no crawler names. One tracker measured it following robots.txt 79% of the time",
+          "src": "knownagents-qwen"
+        },
+        {
+          "ua": "TongyiBot",
+          "cat": "fetch",
+          "documented": false,
+          "caution": "Name from community lists; Alibaba publishes no crawler names"
+        }
+      ]
+    },
+    {
+      "name": "Z.ai (GLM)",
+      "open": {
+        "kind": "weights",
+        "why": "GLM models open weights; MIT until GLM-5.3, which has a custom licence",
+        "src": "zai-license"
+      },
+      "link": [
+        "Z.ai training summary",
+        "https://cdn.bigmodel.cn/static/glm5.3/The%20Public%20Summary%20of%20Training%20Content%20for%20the%20GLM5%20Family.pdf"
+      ],
+      "notes": {
+        "search": "No published search bot",
+        "fetch": "No published fetch bot"
+      },
+      "bots": [
+        {
+          "ua": "GLMBot",
+          "cat": "train",
+          "note": "Named in Z.ai’s EU training summary, which says it respects robots.txt",
+          "link": [
+            "Z.ai training summary",
+            "https://cdn.bigmodel.cn/static/glm5.3/The%20Public%20Summary%20of%20Training%20Content%20for%20the%20GLM5%20Family.pdf"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Huawei",
+      "open": {
+        "kind": "mixed",
+        "why": "openPangu open weights; commercial Pangu models closed",
+        "src": "openpangu"
+      },
+      "bots": [
+        {
+          "ua": "PanguBot",
+          "cat": "train",
+          "documented": false,
+          "caution": "No official documentation found; purpose (PanGu model training) from community lists"
+        },
+        {
+          "ua": "PetalBot",
+          "cat": "search",
+          "note": "Petal Search and Huawei’s AI assistant"
+        }
+      ]
+    },
+    {
+      "name": "Ai2 (Allen Institute)",
+      "open": {
+        "kind": "data",
+        "why": "OLMo weights, training data and code published"
+      },
+      "bots": [
+        {
+          "ua": "AI2Bot",
+          "cat": "train",
+          "note": "Trains open language models"
+        }
+      ]
+    },
+    {
+      "name": "Webz.io",
+      "open": {
+        "kind": "provider",
+        "why": "Sells web data feeds, including for AI training"
+      },
+      "bots": [
+        {
+          "ua": "Webzio-Extended",
+          "cat": "train",
+          "note": "Controls whether your content goes into datasets Webz.io sells for AI training"
+        },
+        {
+          "ua": "omgili",
+          "cat": "train",
+          "note": "Webz.io crawler; data sold through APIs and datasets, including for AI training"
+        }
+      ]
+    },
+    {
+      "name": "You.com",
+      "open": {
+        "kind": "none",
+        "why": "Uses other companies’ models"
+      },
+      "bots": [
+        {
+          "ua": "YouBot",
+          "cat": "search",
+          "note": "You.com search and AI answers"
+        }
+      ]
+    },
+    {
+      "name": "DuckDuckGo",
+      "open": {
+        "kind": "none",
+        "why": "Duck.ai offers other companies’ models anonymously"
+      },
+      "bots": [
+        {
+          "ua": "DuckAssistBot",
+          "cat": "search",
+          "note": "AI-assisted answers in DuckDuckGo search; not training"
+        }
+      ]
+    }
+  ],
+  "userAgentNotes": {
+    "img2dataset": {
+      "kind": "ignores",
+      "note": "Never reads robots.txt. By default it skips images sent with an X-Robots-Tag of noai, noimageai, noindex or noimageindex, but whoever runs it can turn that off"
+    },
+    "facebookexternalhit": {
+      "kind": "ignores",
+      "note": "Link previews on Facebook, Instagram and Messenger; may bypass robots.txt for security checks. Blocking breaks previews"
+    },
+    "colly": {
+      "kind": "ignores",
+      "note": "Go scraping library; ignores robots.txt by default"
+    },
+    "anthropic-ai": {
+      "kind": "legacy",
+      "note": "Retired Anthropic name. Harmless, but has no effect"
+    },
+    "claude-web": {
+      "kind": "legacy",
+      "note": "Retired Anthropic name. Harmless, but has no effect"
+    },
+    "facebookbot": {
+      "kind": "legacy",
+      "note": "No longer in Meta’s crawler documentation"
+    },
+    "google-notebooklm": {
+      "kind": "legacy",
+      "note": "Former name of Google-GeminiNotebook, supported until August 2026"
+    },
+    "chatglm-spider": {
+      "kind": "unconfirmed",
+      "note": "Older name from community lists; Z.ai’s training summary names GLMBot"
+    },
+    "aliyunbot": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists, not confirmed by Alibaba"
+    },
+    "erniebot": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists, not confirmed by Baidu"
+    },
+    "yiyanbot": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists, not confirmed by Baidu"
+    },
+    "grokbot": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists; xAI publishes no crawler names"
+    },
+    "xai-grok": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists; xAI publishes no crawler names"
+    },
+    "xai-searchbot": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists; xAI publishes no crawler names"
+    },
+    "grok-deepsearch": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists; xAI publishes no crawler names"
+    },
+    "grok-agent": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists; xAI publishes no crawler names"
+    },
+    "deepseekbot": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists; DeepSeek publishes no crawler documentation"
+    },
+    "coherebot": {
+      "kind": "documented",
+      "note": "Cohere’s own robots.txt name. Cohere says it doesn’t currently crawl to train models"
+    },
+    "cohere-ai": {
+      "kind": "unconfirmed",
+      "note": "Not in Cohere’s documentation, which uses Coherebot"
+    },
+    "cohere-training-data-crawler": {
+      "kind": "unconfirmed",
+      "note": "Not in Cohere’s documentation, which uses Coherebot"
+    },
+    "imagesiftbot": {
+      "kind": "documented",
+      "note": "Hive’s image search index; training not mentioned. If not named, it follows your Googlebot rules"
+    },
+    "meta-externalads": {
+      "kind": "documented",
+      "note": "Meta advertising crawler"
+    },
+    "google-cloudvertexbot": {
+      "kind": "documented",
+      "note": "Google Cloud Vertex AI crawler"
+    },
+    "firecrawlagent": {
+      "kind": "tool",
+      "note": "Firecrawl: multi-page crawls check robots.txt; single-page scrapes don’t"
+    },
+    "trafilatura": {
+      "kind": "tool",
+      "note": "Its crawler checks robots.txt; single downloads don’t"
+    },
+    "scrapy": {
+      "kind": "tool",
+      "note": "Checks robots.txt only in projects made from its template"
+    },
+    "googlebot-image": {
+      "kind": "documented",
+      "note": "Google Images and Discover. Not a training control"
+    },
+    "googleother": {
+      "kind": "documented",
+      "note": "Google’s general crawler for product teams, not Search"
+    },
+    "googleother-image": {
+      "kind": "documented",
+      "note": "Google’s general crawler for images, not Search"
+    },
+    "googleother-video": {
+      "kind": "documented",
+      "note": "Google’s general crawler for video, not Search"
+    },
+    "__usage_ai-training": {
+      "kind": "signal",
+      "note": "Shared AI-training preference from an individual IETF draft. Anthropic applies it when ClaudeBot isn’t named; Google (when Google-Extended isn’t named) and Microsoft plan to from early 2027"
+    },
+    "*": {
+      "kind": "documented",
+      "note": "All crawlers not named elsewhere"
+    },
+    "operator": {
+      "kind": "noeffect",
+      "note": "OpenAI’s agent identifies itself with signed request headers (Signature-Agent: https://chatgpt.com) and a normal browser user agent, so this rule likely matches nothing"
+    },
+    "mistralai-crawler": {
+      "kind": "noeffect",
+      "note": "Not a Mistral name. Mistral documents MistralAI-Training, MistralAI-Index and MistralAI-User"
+    },
+    "deepseek": {
+      "kind": "unconfirmed",
+      "note": "DeepSeek publishes no crawler names; this rule likely matches nothing"
+    },
+    "deepseek-crawler": {
+      "kind": "unconfirmed",
+      "note": "DeepSeek publishes no crawler names; this rule likely matches nothing"
+    },
+    "deepseek-v3": {
+      "kind": "noeffect",
+      "note": "A model name, not a crawler; this rule likely matches nothing"
+    },
+    "webzio": {
+      "kind": "unconfirmed",
+      "note": "Not a documented Webz.io name; its crawler is omgili, its training control Webzio-Extended"
+    },
+    "omgilibot": {
+      "kind": "legacy",
+      "note": "Old Webz.io name; omgili is the current crawler"
+    },
+    "laiondownloader": {
+      "kind": "unconfirmed",
+      "note": "LAION says it doesn’t crawl: its datasets list image URLs from Common Crawl, downloaded with tools such as img2dataset"
+    },
+    "ai2bot-dolma": {
+      "kind": "unconfirmed",
+      "note": "Not on Ai2’s crawler page, which names only AI2Bot"
+    },
+    "tiktokspider": {
+      "kind": "caution",
+      "note": "ByteDance fetcher; purpose and robots.txt behaviour not documented"
+    },
+    "diffbot": {
+      "kind": "caution",
+      "note": "Builds a web knowledge graph sold for AI and data uses; community lists say robots.txt compliance is up to its customers"
+    },
+    "brightbot": {
+      "kind": "caution",
+      "note": "Bright Data; community lists report AI-training use and disguised requests"
+    },
+    "isscybercrawler": {
+      "kind": "ignores",
+      "note": "ISS cyber-risk models; community lists report it ignores robots.txt"
+    },
+    "isscyberriskcrawler": {
+      "kind": "ignores",
+      "note": "ISS cyber-risk models; community lists report it ignores robots.txt"
+    },
+    "aihitbot": {
+      "kind": "aidata",
+      "note": "aiHit company data for AI systems (community lists)"
+    },
+    "cotoyogi": {
+      "kind": "aidata",
+      "note": "ROIS (Japan) crawler for Japanese-language AI training (community lists)"
+    },
+    "crawlspace": {
+      "kind": "aidata",
+      "note": "Crawling platform supplying AI agents and RAG apps (community lists)"
+    },
+    "factset_spyderbot": {
+      "kind": "aidata",
+      "note": "FactSet data collection for AI (community lists)"
+    },
+    "friendlycrawler": {
+      "kind": "aidata",
+      "note": "Unknown operator building machine-learning datasets (community lists)"
+    },
+    "icc-crawler": {
+      "kind": "aidata",
+      "note": "NICT (Japan) crawler for AI research, shared with third parties (community lists)"
+    },
+    "kangaroo": {
+      "kind": "aidata",
+      "note": "Kangaroo LLM: training data for an Australian language model (community lists)"
+    },
+    "qualifiedbot": {
+      "kind": "aidata",
+      "note": "Qualified: context for AI sales chatbots (community lists)"
+    },
+    "sidetrade": {
+      "kind": "aidata",
+      "note": "Sidetrade indexer: data for products including AI training (community lists)"
+    },
+    "timpibot": {
+      "kind": "aidata",
+      "note": "Timpi: data offered for AI model training (community lists)"
+    },
+    "velenpublicwebcrawler": {
+      "kind": "aidata",
+      "note": "Velen: business datasets and machine-learning models (community lists)"
+    },
+    "wpbot": {
+      "kind": "aidata",
+      "note": "AI chatbot plugin for WordPress (community lists)"
+    },
+    "semrushbot-ocob": {
+      "kind": "aidata",
+      "note": "Semrush ContentShake AI tool"
+    },
+    "semrushbot-swa": {
+      "kind": "aidata",
+      "note": "Semrush SEO Writing Assistant"
+    },
+    "mediapartners-google": {
+      "kind": "ads",
+      "note": "Google AdSense. Blocking it affects ad targeting, not Search or AI"
+    },
+    "amazonadbot": {
+      "kind": "ads",
+      "note": "Amazon advertising crawler"
+    },
+    "peer39_crawler": {
+      "kind": "ads",
+      "note": "Peer39 contextual ad targeting and brand safety"
+    },
+    "peer_39_crawler": {
+      "kind": "ads",
+      "note": "Peer39 contextual ad targeting and brand safety"
+    },
+    "proximic": {
+      "kind": "ads",
+      "note": "Contextual ad targeting"
+    },
+    "admantx": {
+      "kind": "ads",
+      "note": "Contextual ad targeting and brand safety"
+    },
+    "magpie-crawler": {
+      "kind": "intel",
+      "ua": "magpie-crawler",
+      "note": "Brandwatch social and media monitoring",
+      "url": "https://www.brandwatch.com/legal/magpie-crawler/"
+    },
+    "meltwater": {
+      "kind": "intel",
+      "note": "Meltwater media monitoring"
+    },
+    "awariorssbot": {
+      "kind": "intel",
+      "ua": "AwarioRssBot",
+      "note": "Awario brand monitoring",
+      "url": "https://awario.com/bots.html"
+    },
+    "awariosmartbot": {
+      "kind": "intel",
+      "ua": "AwarioSmartBot",
+      "note": "Awario brand monitoring",
+      "url": "https://awario.com/bots.html"
+    },
+    "blp_bbot": {
+      "kind": "intel",
+      "note": "Bloomberg news crawler"
+    },
+    "newsnow": {
+      "kind": "intel",
+      "note": "NewsNow news aggregator"
+    },
+    "landau-media-spider": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists; its user agent links to landaumedia.de (Landau Media, a German media-monitoring firm). Purpose not documented"
+    },
+    "um-ln": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists, said to be UNICEPTA (formerly Ubermetrics) media monitoring (Germany). Not confirmed by UNICEPTA"
+    },
+    "um-ic": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists, said to be UNICEPTA (formerly Ubermetrics) media monitoring (Germany). Not confirmed by UNICEPTA"
+    },
+    "um-fc": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists, said to be UNICEPTA (formerly Ubermetrics) media monitoring (Germany). Not confirmed by UNICEPTA"
+    },
+    "pmgcrawler": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists, said to be PMG Presse-Monitor press clipping (Germany). Not confirmed by PMG"
+    },
+    "echobot": {
+      "kind": "unconfirmed",
+      "note": "Name from community lists, which attribute it to Echobox (UK social publishing), not the German Echobot (now Dealfront). Not confirmed by either"
+    },
+    "news-please": {
+      "kind": "tool",
+      "note": "Open-source news crawler library; behaviour depends on who runs it"
+    },
+    "imgproxy": {
+      "kind": "tool",
+      "note": "Image-resizing server software. Its requests come from whoever runs it, usually fetching images to resize"
+    },
+    "semrushbot": {
+      "kind": "seo",
+      "ua": "SemrushBot",
+      "note": "Semrush SEO crawler",
+      "url": "https://www.semrush.com/bot/"
+    },
+    "ahrefsbot": {
+      "kind": "seo",
+      "ua": "AhrefsBot",
+      "note": "Ahrefs SEO crawler",
+      "url": "https://ahrefs.com/robot"
+    },
+    "dotbot": {
+      "kind": "seo",
+      "note": "Moz SEO crawler"
+    },
+    "dataforseobot": {
+      "kind": "seo",
+      "ua": "DataForSeoBot",
+      "note": "DataForSEO crawler",
+      "url": "https://dataforseo.com/dataforseo-bot"
+    },
+    "blexbot": {
+      "kind": "seo",
+      "note": "BLEXBot (WebMeUp) backlink crawler"
+    },
+    "mj12bot": {
+      "kind": "seo",
+      "ua": "MJ12bot",
+      "note": "Majestic backlink crawler",
+      "url": "https://mj12bot.com/"
+    },
+    "megaindex": {
+      "kind": "seo",
+      "note": "MegaIndex SEO crawler"
+    },
+    "yandex": {
+      "kind": "searchengine",
+      "note": "Yandex search (Russia)"
+    },
+    "baiduspider": {
+      "kind": "searchengine",
+      "note": "Baidu search (China); also supplies Baidu’s ERNIE"
+    },
+    "360spider": {
+      "kind": "searchengine",
+      "note": "360 Search (China)"
+    },
+    "yisouspider": {
+      "kind": "searchengine",
+      "note": "Shenma search (China, Alibaba)"
+    },
+    "sogou": {
+      "kind": "searchengine",
+      "note": "Sogou search (China)"
+    },
+    "mail.ru_bot": {
+      "kind": "searchengine",
+      "note": "Mail.ru search (Russia)"
+    },
+    "seekport": {
+      "kind": "searchengine",
+      "note": "Seekport search engine"
+    },
+    "psbot": {
+      "kind": "searchengine",
+      "note": "Picsearch image search"
+    },
+    "scoop.it": {
+      "kind": "intel",
+      "note": "Scoop.it content-curation platform"
+    },
+    "sistrix": {
+      "kind": "seo",
+      "ua": "sistrix",
+      "note": "SISTRIX SEO toolbox crawler. Its user agent says “SISTRIX Crawler”",
+      "url": "https://www.sistrix.com/tutorials/crawling-errors-in-the-onpage-projects/"
+    },
+    "seobilitybot": {
+      "kind": "seo",
+      "ua": "SeobilityBot",
+      "note": "Seobility SEO audit crawler (Germany)",
+      "url": "https://www.seobility.net/en/bot/"
+    },
+    "seobility": {
+      "kind": "seo",
+      "ua": "Seobility",
+      "note": "Seobility SEO audit crawler (Germany); Seobility also accepts this name",
+      "url": "https://www.seobility.net/en/bot/"
+    },
+    "audisto": {
+      "kind": "seo",
+      "ua": "audisto",
+      "note": "Audisto SEO crawler for verified sites (Germany)",
+      "url": "https://audisto.com/help/crawler/bot/"
+    },
+    "audisto-essential": {
+      "kind": "seo",
+      "ua": "audisto-essential",
+      "note": "Audisto SEO crawler that can crawl any site (Germany)",
+      "url": "https://audisto.com/help/crawler/bot/"
+    },
+    "seokicks": {
+      "kind": "seo",
+      "ua": "SEOkicks",
+      "note": "SEOkicks backlink database crawler",
+      "url": "https://www.seokicks.de/robot.html"
+    },
+    "searchmetricsbot": {
+      "kind": "seo",
+      "ua": "SearchmetricsBot",
+      "note": "Searchmetrics SEO crawler, now run by Conductor",
+      "url": "https://www.conductor.com/lp/searchmetricsbot/"
+    },
+    "rytebot": {
+      "kind": "seo",
+      "ua": "RyteBot",
+      "note": "Ryte website-quality tools crawler (formerly OnPage.org), now documented by Semrush",
+      "url": "https://www.semrush.com/bot/"
+    },
+    "siteauditbot": {
+      "kind": "seo",
+      "ua": "SiteAuditBot",
+      "note": "Semrush Site Audit crawler",
+      "url": "https://www.semrush.com/bot/"
+    },
+    "semrushbot-ba": {
+      "kind": "seo",
+      "ua": "SemrushBot-BA",
+      "note": "Semrush Backlink Audit crawler",
+      "url": "https://www.semrush.com/bot/"
+    },
+    "semrushbot-si": {
+      "kind": "seo",
+      "ua": "SemrushBot-SI",
+      "note": "Semrush On Page SEO Checker crawler",
+      "url": "https://www.semrush.com/bot/"
+    },
+    "semrushbot-ft": {
+      "kind": "seo",
+      "ua": "SemrushBot-FT",
+      "note": "Semrush Plagiarism Checker crawler",
+      "url": "https://www.semrush.com/bot/"
+    },
+    "semrushbot-esi": {
+      "kind": "seo",
+      "ua": "SemrushBot-ESI",
+      "note": "Semrush Enterprise Site Intelligence crawler",
+      "url": "https://www.semrush.com/bot/"
+    },
+    "splitsignalbot": {
+      "kind": "seo",
+      "ua": "SplitSignalBot",
+      "note": "Semrush SplitSignal SEO A/B testing crawler",
+      "url": "https://www.semrush.com/bot/"
+    },
+    "ahrefssiteaudit": {
+      "kind": "seo",
+      "ua": "AhrefsSiteAudit",
+      "note": "Ahrefs Site Audit crawler. Site owners can ask Ahrefs to make it ignore robots.txt on their own sites",
+      "url": "https://ahrefs.com/robot/site-audit"
+    },
+    "rogerbot": {
+      "kind": "seo",
+      "ua": "rogerbot",
+      "note": "Moz Pro campaign site crawler",
+      "url": "https://moz.com/help/moz-procedures/crawlers/rogerbot"
+    },
+    "serpstatbot": {
+      "kind": "seo",
+      "ua": "serpstatbot",
+      "note": "Serpstat backlink database crawler",
+      "url": "https://serpstatbot.com/"
+    },
+    "barkrowler": {
+      "kind": "seo",
+      "ua": "Barkrowler",
+      "note": "Babbar link-graph crawler for SEO tools",
+      "url": "https://www.babbar.tech/crawler"
+    },
+    "serankingbacklinksbot": {
+      "kind": "seo",
+      "ua": "SERankingBacklinksBot",
+      "note": "SE Ranking backlink database crawler",
+      "url": "https://help.seranking.com/hc/en-us/articles/23020353159964-SERankingBacklinksBot-Crawler"
+    },
+    "sebot-wa": {
+      "kind": "seo",
+      "ua": "SEBot-WA",
+      "note": "SE Ranking Website Audit crawler. Users can switch off robots.txt",
+      "url": "https://help.seranking.com/hc/en-us/articles/16335355751196-Verifying-SE-Ranking-Crawler-FAQ"
+    },
+    "screaming": {
+      "kind": "seo",
+      "ua": "Screaming Frog SEO Spider",
+      "note": "Screaming Frog desktop SEO crawler, run by its users. Users can switch off robots.txt",
+      "url": "https://www.screamingfrog.co.uk/seo-spider/user-guide/configuration/"
+    },
+    "sitebulb": {
+      "kind": "seo",
+      "ua": "Sitebulb",
+      "note": "Sitebulb website audit crawler, run by its users. Users can switch off robots.txt",
+      "url": "https://support.sitebulb.com/en/articles/9853801-robots-directives-settings"
+    },
+    "oncrawl": {
+      "kind": "seo",
+      "ua": "Oncrawl",
+      "note": "Oncrawl technical SEO crawler",
+      "url": "https://help.oncrawl.com/en/articles/2767653-how-does-the-oncrawl-bot-find-and-crawl-pages"
+    },
+    "botify": {
+      "kind": "seo",
+      "ua": "botify",
+      "note": "Botify SEO crawler. If not named, it follows your Googlebot rules",
+      "url": "https://support.botify.com/en/articles/9108551-overriding-robots-txt-in-botify-crawls",
+      "fallback": [
+        "Googlebot"
+      ]
+    },
+    "lumar": {
+      "kind": "seo",
+      "ua": "lumar",
+      "note": "Lumar (formerly Deepcrawl) website optimisation crawler",
+      "url": "https://www.lumar.io/spdr/"
+    },
+    "deepcrawl": {
+      "kind": "seo",
+      "ua": "deepcrawl",
+      "note": "Former name of Lumar’s SEO crawler; Lumar still honours it",
+      "url": "https://www.lumar.io/spdr/"
+    },
+    "jetoctopus": {
+      "kind": "seo",
+      "ua": "JetOctopus",
+      "note": "JetOctopus SEO crawler",
+      "url": "https://jetoctopus.com/a-complete-list-of-user-agents-used-by-jetoctopus/"
+    },
+    "siteimprovebot": {
+      "kind": "seo",
+      "ua": "SiteimproveBot",
+      "note": "Siteimprove quality, SEO and accessibility crawler. Its user agent says SiteCheck-sitecrawl",
+      "url": "https://help.siteimprove.com/support/solutions/articles/80000985783-update-to-the-robots-txt-parser"
+    },
+    "siteimprovebot-crawler": {
+      "kind": "seo",
+      "ua": "SiteimproveBot-Crawler",
+      "note": "Siteimprove quality, SEO and accessibility crawler (alternative name)",
+      "url": "https://help.siteimprove.com/support/solutions/articles/80000985783-update-to-the-robots-txt-parser"
+    },
+    "similarweb": {
+      "kind": "seo",
+      "ua": "similarweb",
+      "note": "Similarweb Site Audit crawler",
+      "url": "https://support.similarweb.com/hc/en-us/articles/18091514382749-Similarweb-Bot"
+    },
+    "ezoicbot": {
+      "kind": "tool",
+      "note": "Ezoic publisher-platform crawler",
+      "url": "https://www.ezoic.com/bot"
+    },
+    "turnitinbot": {
+      "kind": "tool",
+      "note": "Turnitin plagiarism-detection crawler",
+      "url": "https://www.turnitin.com/robot/crawlerinfo.html"
+    },
+    "uptimerobot": {
+      "kind": "noeffect",
+      "note": "UptimeRobot uptime checks of URLs the site owner sets up. Monitors like this usually don’t read robots.txt",
+      "url": "https://help.uptimerobot.com/en/articles/11358489-what-is-the-uptimerobot-user-agent-string"
+    },
+    "statuscake": {
+      "kind": "noeffect",
+      "note": "StatusCake uptime checks of URLs the site owner sets up. Monitors like this usually don’t read robots.txt",
+      "url": "https://www.statuscake.com/kb/knowledge-base/testing-websites-using-incapsula/"
+    },
+    "better": {
+      "kind": "noeffect",
+      "note": "Better Stack uptime checks of URLs the site owner sets up. Monitors like this usually don’t read robots.txt",
+      "url": "https://betterstack.com/docs/uptime/frequently-asked-questions"
+    },
+    "qwantbot": {
+      "kind": "searchengine",
+      "note": "Qwant search (France)",
+      "url": "https://help.qwant.com/hc/fr-fr/articles/51146433634833-Le-bot-Qwant-QwantBot-et-le-fichier-robots-txt"
+    },
+    "qwantbot-news": {
+      "kind": "searchengine",
+      "note": "Qwant News (France)",
+      "url": "https://help.qwant.com/hc/fr-fr/articles/51146433634833-Le-bot-Qwant-QwantBot-et-le-fichier-robots-txt"
+    },
+    "mojeekbot": {
+      "kind": "searchengine",
+      "note": "Mojeek independent search engine",
+      "url": "https://www.mojeek.com/bot.html"
+    },
+    "seznambot": {
+      "kind": "searchengine",
+      "note": "Seznam.cz search (Czech Republic)",
+      "url": "https://o-seznam.cz/napoveda/vyhledavani/en/seznambot-crawler/"
+    },
+    "duckduckbot": {
+      "kind": "searchengine",
+      "note": "DuckDuckGo search crawler",
+      "url": "https://duckduckgo.com/duckduckgo-help-pages/results/duckduckbot"
+    },
+    "kagibot": {
+      "kind": "searchengine",
+      "note": "Kagi search. If not named, it follows your Googlebot rules",
+      "url": "https://kagi.com/bot"
+    },
+    "search.marginalia.nu": {
+      "kind": "searchengine",
+      "note": "Marginalia independent search engine",
+      "url": "https://www.marginalia.nu/marginalia-search/for-webmasters/"
+    },
+    "coccocbot": {
+      "kind": "searchengine",
+      "note": "Coc Coc search (Vietnam); covers all Coc Coc robots",
+      "url": "https://coccoc.com/search/console/en/coc-coc-robots"
+    },
+    "coccocbot-web": {
+      "kind": "searchengine",
+      "note": "Coc Coc search (Vietnam), main web crawler",
+      "url": "https://coccoc.com/search/console/en/coc-coc-robots"
+    },
+    "yeti": {
+      "kind": "searchengine",
+      "note": "Naver search (South Korea)",
+      "url": "https://searchadvisor.naver.com/guide/seo-basic-firewall"
+    },
+    "slurp": {
+      "kind": "searchengine",
+      "note": "Yahoo Search; also collects partner content for Yahoo News, Finance and Sports",
+      "url": "https://help.yahoo.com/kb/SLN22600.html"
+    },
+    "adsbot-google": {
+      "kind": "ads",
+      "note": "Google Ads landing-page quality checks. Ignores * rules, so it must be named to be blocked",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
+    },
+    "adsbot-google-mobile": {
+      "kind": "ads",
+      "note": "Google Ads mobile landing-page checks. Ignores * rules, so it must be named to be blocked",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
+    },
+    "adsbot-google-mobile-apps": {
+      "kind": "legacy",
+      "note": "Retired Google Ads crawler for Android app pages. Harmless, but has no effect",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
+    },
+    "duplexweb-google": {
+      "kind": "legacy",
+      "note": "Retired crawler for Google’s Duplex on the web. Harmless, but has no effect",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
+    },
+    "googleweblight": {
+      "kind": "legacy",
+      "note": "Retired Google Web Light. Harmless, but has no effect",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-special-case-crawlers"
+    },
+    "storebot-google": {
+      "kind": "documented",
+      "note": "Google Shopping crawler. Not Search ranking, not AI",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers"
+    },
+    "google-inspectiontool": {
+      "kind": "documented",
+      "note": "Google Search testing tools, such as URL Inspection and the Rich Results Test",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers"
+    },
+    "googlebot-video": {
+      "kind": "documented",
+      "note": "Video features in Google Search. Not a training control",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers"
+    },
+    "googlebot-news": {
+      "kind": "news",
+      "note": "Google News. A robots.txt name only: the fetching is done by Googlebot",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers"
+    },
+    "slackbot-linkexpanding": {
+      "kind": "ignores",
+      "note": "Slack link previews. Slack says it doesn’t honour robots.txt",
+      "url": "https://api.slack.com/robots"
+    },
+    "slackbot": {
+      "kind": "ignores",
+      "note": "Slack’s general-purpose fetcher. Slack says it doesn’t honour robots.txt",
+      "url": "https://api.slack.com/robots"
+    },
+    "slack-imgproxy": {
+      "kind": "documented",
+      "note": "Slack image proxy for images posted in Slack",
+      "url": "https://api.slack.com/robots"
+    },
+    "discordbot": {
+      "kind": "documented",
+      "note": "Discord link previews",
+      "url": "https://support.discord.com/hc/en-us/articles/42500550752919-About-Discord-Link-Previews-and-the-Discordbot"
+    },
+    "pinterestbot": {
+      "kind": "documented",
+      "note": "Pinterest crawler for Pin content and product details",
+      "url": "https://help.pinterest.com/en/business/article/pinterest-crawler"
+    },
+    "trendictionbot": {
+      "kind": "intel",
+      "ua": "trendictionbot",
+      "note": "Trendiction (Talkwalker’s company, Luxembourg) media and market data crawler",
+      "url": "https://www.trendiction.com/bot"
+    },
+    "mediatoolkitbot": {
+      "kind": "intel",
+      "ua": "Mediatoolkitbot",
+      "note": "Determ (formerly Mediatoolkit) media monitoring, Croatia",
+      "url": "https://determ.com/robot/"
+    },
+    "buck": {
+      "kind": "intel",
+      "ua": "Buck",
+      "note": "Hypefactors media monitoring",
+      "url": "https://app.hypefactors.com/media-monitoring/about.html"
+    },
+    "mediamonitoringbot": {
+      "kind": "intel",
+      "ua": "MediaMonitoringBot",
+      "note": "Media monitoring of Ukrainian online media",
+      "url": "https://mediamonitoringbot.com/crawler"
+    },
+    "pressenginebot": {
+      "kind": "ignores",
+      "note": "PressEngine coverage tracking for video-game PR. PressEngine says it doesn’t follow robots.txt",
+      "url": "https://pressengine.net/crawl-policy"
+    },
+    "archive.org_bot": {
+      "kind": "archive",
+      "note": "Internet Archive and Archive-It. Follows robots.txt by default; Archive-It customers can override it",
+      "url": "https://support.archive-it.org/hc/en-us/articles/10564861588500-Troubleshooting-robots-txt-exclusions"
+    },
+    "bnf.fr_bot": {
+      "kind": "ignores",
+      "note": "French National Library web archive. As a legal-deposit crawler it is allowed to disregard robots.txt",
+      "url": "https://www.bnf.fr/en/your-website-harvested-bnfs-robot"
+    },
+    "bl.uk_lddc_bot": {
+      "kind": "archive",
+      "note": "UK Web Archive legal-deposit crawler. Generally follows robots.txt, but may overrule it",
+      "url": "https://www.nls.uk/about-us/who-and-what/legal-deposit/web-harvesting/"
+    },
+    "arquivo-web-crawler": {
+      "kind": "archive",
+      "note": "Arquivo.pt, the Portuguese national web archive",
+      "url": "https://sobre.arquivo.pt/en/help/crawling-and-archiving-web-content/"
+    },
+    "nlux_iaharvester": {
+      "kind": "archive",
+      "note": "National Library of Luxembourg web archive",
+      "url": "https://bnl.public.lu/en/offres-numeriques/webarchive.html"
+    },
+    "nlnbot": {
+      "kind": "archive",
+      "note": "National Library of Norway web archive",
+      "url": "https://www.nb.no/en/collection/web-archive/technology/"
+    },
+    "feedly": {
+      "kind": "ignores",
+      "note": "Feedly RSS reader’s feed fetcher. Feedly says it doesn’t follow robots.txt",
+      "url": "https://feedly.com/fetcher.html"
+    },
+    "inoreader": {
+      "kind": "ignores",
+      "note": "Inoreader RSS reader’s feed fetcher. Inoreader says it doesn’t read robots.txt",
+      "url": "https://www.inoreader.com/feed-fetcher"
+    },
+    "feedfetcher-google": {
+      "kind": "ignores",
+      "note": "Google’s RSS and Atom fetcher for Google News and WebSub. Google says it ignores robots.txt",
+      "url": "https://developers.google.com/crawling/docs/crawlers-fetchers/feedfetcher"
+    },
+    "flipboardproxy": {
+      "kind": "news",
+      "note": "Flipboard fetching pages for the Flipboard app",
+      "url": "https://about.flipboard.com/proxy-service/"
+    },
+    "aolbot-news": {
+      "kind": "news",
+      "note": "AOL news article crawler",
+      "url": "https://help.aol.com/articles/aolbot"
+    },
+    "newscrawler": {
+      "kind": "news",
+      "note": "Newstex content-licensing feed crawler",
+      "url": "https://www.newstex.com/documentations/newstex-newscrawler-bot"
+    },
+    "at-bot": {
+      "kind": "documented",
+      "note": "nic.at (.at domain registry) start-page fetcher, Austria",
+      "url": "https://www.nic.at/en/good_to_know/technology/at-bot"
+    },
+    "cert.at-crawler": {
+      "kind": "documented",
+      "note": "CERT.at security crawler of .at start pages, Austria",
+      "url": "https://www.cert.at/en/services/crawler/"
+    }
+  },
+  "searchEngines": {
+    "Googlebot": "Also removes this site from Google Search",
+    "Bingbot": "Also removes this site from Bing and Copilot answers",
+    "Applebot": "Also removes this site from Siri and Spotlight suggestions",
+    "PetalBot": "Also removes this site from Petal Search"
+  },
+  "flags": {
+    "ignores": "ignores robots.txt",
+    "legacy": "retired name",
+    "unconfirmed": "unconfirmed name",
+    "noeffect": "likely no effect",
+    "caution": "caution",
+    "unknown": "unknown",
+    "documented": "documented",
+    "signal": "preference signal",
+    "tool": "tool",
+    "aidata": "AI data",
+    "ads": "ads",
+    "intel": "monitoring",
+    "seo": "SEO tool",
+    "searchengine": "search engine",
+    "archive": "web archive",
+    "news": "news or feeds"
+  }
+}

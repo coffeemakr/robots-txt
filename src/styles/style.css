@@ -1,0 +1,727 @@
+/* VOICE: a precise inspection tool, calm and direct, like a customs checklist.
+   IDEA: a stamped inspection sheet: every bot gets a verdict stamp per purpose.
+   PICTURE: the live matrix of companies x training/search/fetch, stamps in cells.
+   COLOUR and TYPE: ice ground, ink text, hot pink for blocked; Space Grotesk + Inter.
+   LAYOUT: editor left, verdict tiles right, full-width matrix below, details after. */
+:root {
+  color-scheme: light dark;
+  --bg: light-dark(#cbe4ee, #041b24);
+  --ink: light-dark(#06222e, #dff1f7);
+  --card: light-dark(#e9f4f8, #092b38);
+  --line: light-dark(#a3c8d6, #1d4757);
+  --muted: light-dark(#355866, #9cc3d0);
+  --pink: #ff2e7e;
+  --pinksoft: light-dark(#ffe1ec, #4a1733);
+  --warn: light-dark(#8a4b00, #ffc46b);
+  --warnbg: light-dark(#fff1d6, #3a2a0c)
+}
+
+:root[data-theme=light] {
+  color-scheme: light
+}
+
+:root[data-theme=dark] {
+  color-scheme: dark
+}
+
+* {
+  box-sizing: border-box;
+  min-width: 0
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.55 Inter, system-ui, sans-serif;
+  overflow-x: clip
+}
+
+h1,
+h2 {
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-weight: 600;
+  line-height: 1.05;
+  text-wrap: balance;
+  margin: 0
+}
+
+h1 {
+  font-size: clamp(30px, 4.4vw, 46px)
+}
+
+h2 {
+  font-size: 22px;
+  margin-bottom: 12px
+}
+
+.band {
+  padding: clamp(22px, 3.4vw, 48px) max(5vw, 16px)
+}
+
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto
+}
+
+.lede {
+  color: var(--muted);
+  max-width: 68ch;
+  margin: 10px 0 0
+}
+
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: 24px;
+  align-items: stretch
+}
+
+@media(max-width:900px) {
+  .top {
+    grid-template-columns: minmax(0, 1fr)
+  }
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px
+}
+
+textarea {
+  width: 100%;
+  min-height: 340px;
+  resize: vertical;
+  font: 14px/1.5 "JetBrains Mono", ui-monospace, monospace;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px
+}
+
+textarea:focus,
+button:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px
+}
+
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px
+}
+
+button,
+a.btn {
+  font: 500 15px Inter, sans-serif;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center
+}
+
+a.btn {
+  text-decoration: none;
+  white-space: nowrap
+}
+
+a.btn[aria-disabled=true] {
+  opacity: .55
+}
+
+.dom {
+  margin: 0 0 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line)
+}
+
+.domrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px
+}
+
+.domrow input {
+  flex: 1 1 200px;
+  min-height: 44px;
+  font: 16px Inter, sans-serif;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0 12px
+}
+
+.domrow input:focus,
+a.btn:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px
+}
+
+.err {
+  color: light-dark(#b0004a, #ff8db5);
+  font-size: 14px;
+  margin: 6px 0 0
+}
+
+.err:empty {
+  display: none
+}
+
+.hint {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 8px 0 0
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px
+}
+
+@media(max-width:600px) {
+  .tiles {
+    grid-template-columns: minmax(0, 1fr)
+  }
+}
+
+.tile {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px
+}
+
+.tile .k {
+  font-size: 14px;
+  color: var(--muted)
+}
+
+.tile .big {
+  font: 600 clamp(30px, 3.6vw, 44px)/1 "Space Grotesk", sans-serif
+}
+
+.tile .big small {
+  font-size: 16px;
+  color: var(--muted);
+  font-weight: 500
+}
+
+.bar {
+  display: flex;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--line)
+}
+
+.bar i {
+  display: block;
+  height: 100%
+}
+
+.b-blocked {
+  background: var(--pink)
+}
+
+.b-partial {
+  background: repeating-linear-gradient(135deg, var(--pink) 0 4px, transparent 4px 8px)
+}
+
+/* Restricted, but it may not stick: the blocked colour faded a little for caution bots (disputed or
+   undocumented) and more for bots that say they may ignore robots.txt */
+.b-caut {
+  --seg: color-mix(in srgb, var(--pink) 60%, var(--card))
+}
+
+.b-ign {
+  --seg: color-mix(in srgb, var(--pink) 30%, var(--card))
+}
+
+.b-blocked.b-caut,
+.b-blocked.b-ign {
+  background: var(--seg)
+}
+
+.b-partial.b-caut,
+.b-partial.b-ign {
+  background: repeating-linear-gradient(135deg, var(--seg) 0 4px, transparent 4px 8px)
+}
+
+.b-allowed {
+  background: var(--ink);
+  opacity: .18
+}
+
+.tile .sub {
+  font-size: 13px;
+  color: var(--muted)
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  margin: 14px 0 4px
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden
+}
+
+th,
+td {
+  text-align: left;
+  vertical-align: top;
+  padding: 12px;
+  border-bottom: 1px solid var(--line)
+}
+
+th {
+  font: 500 13px Inter, sans-serif;
+  color: var(--muted)
+}
+
+tr.sec td {
+  background: var(--bg);
+  font: 600 14px "Space Grotesk", sans-serif;
+  padding: 8px 12px
+}
+
+th.co {
+  font: 600 16px Inter, sans-serif;
+  color: var(--ink);
+  width: 16%
+}
+
+.open {
+  display: block;
+  margin-top: 3px;
+  font: 500 12px Inter, sans-serif;
+  color: var(--muted);
+  cursor: help
+}
+
+.open sup {
+  cursor: auto
+}
+
+.oleg {
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--muted)
+}
+
+.oleg b {
+  font-weight: 600;
+  color: var(--ink)
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px
+}
+
+.chip {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font: 500 14px Inter, sans-serif;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--ink);
+  width: max-content;
+  max-width: 100%
+}
+
+.chip code {
+  font: 500 13px "JetBrains Mono", monospace;
+  overflow-wrap: anywhere
+}
+
+.chip .st {
+  font-size: 12px;
+  font-weight: 600
+}
+
+.s-blocked {
+  background: var(--pink);
+  border-color: var(--pink);
+  color: #06222e
+}
+
+.s-partial {
+  background: repeating-linear-gradient(135deg, var(--pinksoft) 0 6px, transparent 6px 12px);
+  border-color: var(--pink)
+}
+
+.s-allowed {
+  background: transparent
+}
+
+.s-na {
+  border-style: dashed;
+  border-color: var(--line);
+  color: var(--muted)
+}
+
+.chip.def {
+  border-style: dashed
+}
+
+.chip.def.s-allowed {
+  border-color: var(--muted);
+  color: var(--muted)
+}
+
+.chip.def.s-blocked {
+  background: var(--pinksoft);
+  color: var(--ink)
+}
+
+.chip.def.s-blocked .st {
+  color: #d4005a
+}
+
+.chip .st {
+  font-size: 15px;
+  line-height: 1;
+  width: 1.1em;
+  text-align: center
+}
+
+.chip.ic {
+  min-width: 36px;
+  min-height: 30px;
+  justify-content: center;
+  padding: 4px 8px
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap
+}
+
+.panel h3 {
+  font: 600 17px "Space Grotesk", Inter, sans-serif;
+  margin: 0 0 10px
+}
+
+.meta {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.4
+}
+
+.meta.why {
+  margin: 2px 0 8px
+}
+
+.meta a,
+.foot a {
+  color: var(--ink);
+  text-underline-offset: 2px
+}
+
+.meta code {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px
+}
+
+.flag {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: var(--warnbg);
+  color: var(--warn)
+}
+
+.k-ignores .flag,
+.k-legacy .flag,
+.k-unconfirmed .flag,
+.k-noeffect .flag,
+.k-caution .flag,
+.k-unknown .flag {
+  background: var(--warnbg);
+  color: var(--warn)
+}
+
+.warnbox {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--warnbg);
+  border: 1px solid light-dark(#e3b46a, #6b4f1d);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--ink)
+}
+
+.caut {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--muted);
+  overflow-wrap: anywhere
+}
+
+.caut .ex {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 1.5px solid var(--warn);
+  color: var(--warn);
+  font: 700 11px/1 Inter, sans-serif
+}
+
+.caut.ign .ex {
+  background: var(--warn);
+  color: var(--card)
+}
+
+.caut.ret .ex {
+  border-color: currentColor;
+  color: currentColor
+}
+
+.fn {
+  font-size: 11px;
+  line-height: 0;
+  margin-left: 2px
+}
+
+.fn a {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 600
+}
+
+.fn a:hover,
+.fn a:focus-visible {
+  text-decoration: underline
+}
+
+ol.src {
+  margin: 0;
+  padding-left: 22px
+}
+
+ol.src li {
+  margin: 4px 0
+}
+
+ol.src li:target {
+  background: var(--warnbg)
+}
+
+.warnbox b {
+  display: block;
+  color: var(--warn);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 2px
+}
+
+.k-documented .flag,
+.k-signal .flag,
+.k-tool .flag,
+.k-aidata .flag,
+.k-ads .flag,
+.k-intel .flag,
+.k-seo .flag,
+.k-archive .flag,
+.k-news .flag,
+.k-searchengine .flag {
+  background: var(--bg);
+  color: var(--muted)
+}
+
+.empty {
+  color: var(--muted);
+  font-size: 15px;
+  padding: 12px 0
+}
+
+ul.warn {
+  margin: 0;
+  padding-left: 20px
+}
+
+ul.warn li {
+  margin: 4px 0
+}
+
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px
+}
+
+@media(max-width:900px) {
+  .cols {
+    grid-template-columns: minmax(0, 1fr)
+  }
+}
+
+.gen {
+  border: 0;
+  margin: 0 0 14px;
+  padding: 0
+}
+
+.gen legend {
+  font-weight: 600;
+  padding: 0;
+  margin-bottom: 2px
+}
+
+.genrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px
+}
+
+.check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 6px 0;
+  cursor: pointer;
+  line-height: 1.4
+}
+
+.check input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  accent-color: var(--pink);
+  cursor: pointer
+}
+
+.check input:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px
+}
+
+.gen .hint button {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: inherit;
+  text-decoration: underline;
+  cursor: pointer
+}
+
+.foot {
+  font-size: 13px;
+  color: var(--muted);
+  max-width: 90ch
+}
+
+pre,
+.scroll {
+  overflow-x: auto
+}
+
+code {
+  overflow-wrap: anywhere
+}
+
+@media(max-width:600px) {
+  table {
+    font-size: 13px
+  }
+
+  .stack thead {
+    display: none
+  }
+
+  .stack tr {
+    display: grid;
+    padding-block: 10px
+  }
+
+  .stack td {
+    display: flow-root;
+    border: 0;
+    padding: 3px 0;
+    padding-inline-start: 8em;
+    text-align: start
+  }
+
+  .stack td::before {
+    content: attr(data-l);
+    float: inline-start;
+    width: 7.5em;
+    margin-inline-start: -8em;
+    white-space: normal;
+    color: var(--muted);
+    font-size: 12px
+  }
+
+  .stack td:empty {
+    display: none
+  }
+
+  .stack tr.sec td {
+    padding-inline-start: 12px
+  }
+
+  .stack tr.sec td::before {
+    display: none
+  }
+
+  th.co {
+    width: auto;
+    display: block;
+    padding: 3px 0
+  }
+}
+
+@media(prefers-reduced-motion:no-preference) {
+  .chip {
+    transition: background .2s
+  }
+}

@@ -1,0 +1,12 @@
+---
+// Legend entry for the "!" markers app.js puts next to bots with questionable robots.txt behaviour.
+interface Props {
+  /** ignores: ignores robots.txt; caution: disputed or undocumented; retired: old name with no effect. */
+  kind: 'ignores' | 'caution' | 'retired';
+}
+
+const { kind } = Astro.props;
+const variant = { ignores: 'ign', caution: undefined, retired: 'ret' }[kind];
+---
+
+<span class:list={['caut', variant]} style="margin:0;display:inline-flex"><span class="ex" aria-hidden="true">!</span><slot /></span>

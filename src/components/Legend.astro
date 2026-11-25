@@ -1,0 +1,19 @@
+---
+import StatusChip from './StatusChip.astro';
+import CautionMark from './CautionMark.astro';
+---
+
+<div class="legend">
+  <StatusChip status="blocked" symbol="✕">Blocked</StatusChip>
+  <StatusChip status="partial" symbol="◐">Partial: some paths blocked</StatusChip>
+  <StatusChip status="partial" symbol="◕">Mostly blocked: blocked by default, with exceptions</StatusChip>
+  <StatusChip status="allowed" symbol="✓">Allowed</StatusChip>
+  <StatusChip status="na" symbol="—">Company has no bot for this</StatusChip>
+  <StatusChip status="allowed" symbol="✓" dashed>
+    Dashed: not named in your file, so the default applies (the <code>*</code> group, or allowed if there is none).
+    Solid: named explicitly
+  </StatusChip>
+  <CautionMark kind="ignores">Ignores or may ignore robots.txt</CautionMark>
+  <CautionMark kind="caution">Caution: disputed or undocumented behaviour</CautionMark>
+  <CautionMark kind="retired">Retired name: harmless, but has no effect</CautionMark>
+</div>

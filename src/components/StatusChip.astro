@@ -1,0 +1,13 @@
+---
+// Legend entry showing a status chip as app.js draws it in the tables, followed by its explanation.
+interface Props {
+  status: 'blocked' | 'partial' | 'allowed' | 'na';
+  symbol: string;
+  /** Dashed outline: the default rule applies rather than a named group. */
+  dashed?: boolean;
+}
+
+const { status, symbol, dashed = false } = Astro.props;
+---
+
+<span><span class:list={['chip', 'ic', `s-${status}`, { def: dashed }]} aria-hidden="true"><span class="st">{symbol}</span></span> <slot /></span>
